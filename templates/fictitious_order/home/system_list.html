@@ -1,0 +1,419 @@
+{{ define "home/system_list.html" }}
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--    <link type="text/css" rel="styleSheet" href="/assets/fictitious_order/css/common.css" />-->
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link type="text/css" rel="styleSheet" href="/assets/fictitious_order/css/index.css"/>
+    <style>
+        body {
+            background-color: #eff4fc;
+        }
+
+        #app {
+            text-align: center;
+            position: relative;
+        }
+
+        .system {
+            width: 200px;
+            height: 100px;
+            margin: 10px;
+            border: 1px solid #b59292;
+            display: inline-block;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .system a {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            line-height: 170px;
+        }
+
+        .login {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            z-index: 2;
+        }
+
+        .shadow_box {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            opacity: 0.5;
+        }
+
+        .login_tab {
+            width: 1110px;
+            height: 350px;
+            position: absolute;
+            left: 0px;
+            top: 2px;
+        }
+
+        .show_box {
+            width: 550px;
+            height: 450px;
+            display: inline-block;
+            position: fixed;
+            z-index: 10;
+            left: 50%;
+            top: 200px;
+            margin-left: -275px;
+            overflow: hidden;
+        }
+
+        .login_box {
+            width: 550px;
+            height: 300px;
+            border-radius: 4px;
+            margin-top: 25px;
+            position: relative;
+            display: inline-block;
+            float: left;
+        }
+
+        .login_box_img {
+            width: 550px;
+            height: 275px;
+        }
+
+        .login_left_tip {
+            display: inline-block;
+            float: left;
+            width: 200px;
+            height: 275px;
+            position: absolute;
+            top: 0px;
+            left: 10px;
+        }
+
+        .login_left_tip_title {
+            font-size: 20px;
+            color: #fff;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .login_left_tip_msg {
+            font-size: 14px;
+            color: #f3efef;
+        }
+
+        .login_left_tip .btn_register {
+            position: absolute;
+            bottom: 30px;
+            background: none;
+            border: 1px solid #fff;
+            color: #fff;
+            left: 10px;
+            width: 75px;
+            height: 32px;
+            font-size: 12px;
+        }
+
+        .login_form {
+            width: 300px;
+            height: 325px;
+            background-color: #fff;
+            float: right;
+            box-shadow: 1px 0px 4px #e0e1e2;
+            position: absolute;
+            top: -25px;
+            right: 20px;
+        }
+
+        .login_form_item {
+            width: 260px;
+            height: 50px;
+            margin-left: 20px;
+            text-align: left;
+        }
+
+        .login_form_item_title {
+            font-size: 22px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .login_form_tab_line {
+            width: 100%;
+            height: 3px;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+
+        .login_form_item_by_phone {
+            font-size: 14px;
+            color: #1b9e63;
+            width: 120px;
+            display: inline-block;
+            height: 15px;
+        }
+
+        .login_form_tab_line_active {
+            width: 72px;
+            height: 4px;
+            background-color: #1b9e63;
+            display: inline-block;
+            position: absolute;
+            left: 0px;
+            top: -1px;
+        }
+
+        .login_form_input {
+            width: 254px;
+            height: 36px;
+            border: 1px solid #e6e2e2;
+            border-radius: 0px;
+            margin-top: 9px;
+            font-size: 13px;
+            color: #333;
+            padding-left: 8px;
+        }
+
+        .login_form_input::placeholder {
+            font-size: 12px;
+            text-decoration: 5px;
+        }
+
+        .login_form_input:focus {
+            border-radius: 0px;
+            border: 1px solid #e6e2e2;
+        }
+
+        .login_form_item_btn {
+            position: absolute;
+            bottom: 45px;
+            text-align: right;
+        }
+
+        .login_btn {
+            width: 110px;
+            height: 40px;
+            border-radius: 17px;
+            border: none;
+            box-shadow: 2px 0px 2px #dbd7d7;
+            color: #fff;
+            font-size: 14px;
+            background-color: #1b9e63;
+        }
+
+        .forget_btn {
+            font-size: 10px;
+            /* vertical-align: bottom; */
+            color: #9c9999;
+            float: right;
+            margin-top: 20px;
+            margin-left: 8px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .code_btn {
+            font-size: 10px;
+            /* vertical-align: bottom; */
+            color: #9c9999;
+            float: right;
+            margin-top: 20px;
+            margin-left: 8px;
+            cursor: pointer;
+            text-decoration: underline;
+            text-align: center;
+            width: 60px;
+        }
+
+        .login_form_input_small {
+            width: 180px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    {{ range $value := .list}}
+    <div class="system" style="background-image: url('{{ $value.image }}');background-size: 100%, 100%;">
+        <a href="?sys={{$value.url}}" target="-black">{{ $value.title }}</a>
+    </div>
+    {{ end }}
+    <div class="login">
+        <div class="shadow_box"></div>
+        <div class="show_box">
+            <div class="login_tab" id="login_tab">
+                <div class="login_box">
+                    <img src="/assets/fictitious_order/img/login_bg.webp" class="login_box_img"/>
+                    <div class="login_left_tip">
+                        <p class="login_left_tip_title">还没有账号？</p>
+                        <p class="login_left_tip_title login_left_tip_msg">没关系，1分钟即可完成注册。</p>
+                        <button class="login_btn btn_register" id="to_register">注册</button>
+                    </div>
+                    <div class="login_form">
+                        <div class="login_form_item login_form_item_title">
+                            登录
+                        </div>
+                        <div class="login_form_item login_form_tab">
+                            <p class="login_form_item_by_phone">手机号登录</p>
+                            <div class="login_form_tab_line">
+                                <i class="login_form_tab_line_active"></i>
+                            </div>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="text" class="login_form_input" placeholder="请输入手机号"/>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="password" class="login_form_input" placeholder="请输入密码"/>
+                        </div>
+                        <div class="login_form_item login_form_item_btn">
+                            <button class="login_btn">登录</button>
+                            <a class="forget_btn" id="to_forget">忘记密码</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 注册-->
+                <div class="login_box" id="register_box" style="display: none;">
+                    <img src="/assets/fictitious_order/img/login_bg.webp" class="login_box_img"/>
+                    <div class="login_left_tip">
+                        <p class="login_left_tip_title">还没有账号？</p>
+                        <p class="login_left_tip_title login_left_tip_msg">没关系，1分钟即可完成注册。</p>
+                        <button class="login_btn btn_register to_login">返回</button>
+                    </div>
+                    <div class="login_form">
+                        <div class="login_form_item login_form_item_title">
+                            注册
+                        </div>
+                        <div class="login_form_item">
+                            <input type="text" class="login_form_input" id="register_phone" placeholder="请输入手机号"/>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="text" class="login_form_input login_form_input_small" id="register_code_input"
+                                   placeholder="请输入验证码"/>
+                            <a class="code_btn" id="register_code_get" status="1" title="获取验证码">获取验证码</a>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="text" class="login_form_input" placeholder="请输入邀请码"/>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="password" class="login_form_input" placeholder="请输入密码"/>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="password" class="login_form_input" placeholder="确认密码"/>
+                        </div>
+                        <div class="login_form_item login_form_item_btn login_form_item_btn_register">
+                            <button class="login_btn">注册</button>
+                            <a class="forget_btn">重置</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 找回密码-->
+                <div class="login_box" id="forget_box" style="display: none;">
+                    <img src="/assets/fictitious_order/img/login_bg.webp" class="login_box_img"/>
+                    <div class="login_left_tip">
+                        <p class="login_left_tip_title">还没有账号？</p>
+                        <p class="login_left_tip_title login_left_tip_msg">没关系，1分钟即可完成注册。</p>
+                        <button class="login_btn btn_register to_login">返回</button>
+                    </div>
+                    <div class="login_form">
+                        <div class="login_form_item login_form_item_title">
+                            找回密码
+                        </div>
+                        <div class="login_form_item">
+                            <input type="text" class="login_form_input" placeholder="请输入手机号"/>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="text" class="login_form_input login_form_input_small" placeholder="请输入验证码"/>
+                            <a class="code_btn">获取验证码</a>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="password" class="login_form_input" placeholder="请输入密码"/>
+                        </div>
+                        <div class="login_form_item">
+                            <input type="password" class="login_form_input" placeholder="确认密码"/>
+                        </div>
+                        <div class="login_form_item login_form_item_btn">
+                            <button class="login_btn">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script src="/assets/fictitious_order/js/set.js"></script>
+<script src="/assets/fictitious_order/js/jquery.min.js"></script>
+<script>
+    var hideTool
+    $(function () {
+        $(".to_login").click(function () {
+            $("#login_tab").animate({left: "0px"})
+            hideTool = setTimeout(function () {
+                $("#forget_box").hide()
+                $("#register_box").hide()
+            }, 1000)
+        })
+        $("#to_register").click(function () {
+            clearTimeout(hideTool)
+            $("#register_box").show()
+            $("#register_box .login_form").css({height: "450px"})
+            $("#forget_box").hide()
+            $("#login_tab").animate({left: "-550px"})
+        })
+        $("#to_forget").click(function () {
+            clearTimeout(hideTool)
+            $("#register_box").hide()
+            $("#forget_box").show()
+            $("#forget_box .login_form").css({height: "450px"})
+            $("#login_tab").animate({left: "-550px"})
+        })
+        $("#register_code_get").click(function () {
+            if ($("#register_phone").val() == "") {
+                alert("请输入手机号")
+                return
+            }
+            if ($(this).attr("status") == 2) {
+                return;
+            }
+            $(this).attr("status", 2)
+            send($(this), "","GET", "")
+        })
+    })
+
+    function send(obj, reqUrl, method, data) {
+        reqUrl = "/public/get_code?phone=123"
+        $.ajax({
+            url: reqUrl,
+            type: method,
+            success: function (){
+                timeDown(obj, 30)
+            }
+        })
+    }
+
+    function timeDown(obj, t){
+        obj.html(t)
+        var td = setInterval(function (){
+            if (obj.html() == 0 ) {
+                clearInterval(td)
+                obj.html(obj.attr("title"))
+                return
+            }
+            obj.html(obj.html() - 1)
+        }, 1000)
+    }
+</script>
+</html>
+
+{{ end }}

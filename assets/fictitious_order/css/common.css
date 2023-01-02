@@ -1,0 +1,36 @@
+html,body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 14px;
+}
+div {
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+    color: #000;
+}
+input,button,select{
+    outline: none;
+    line-height: 20px;
+}
+#app{
+    width: 100%;
+    height: 100%;
+}
+.flex,.fCenter,.fBettwen,.fAround{
+    display: flex;
+    align-items: center;
+}
+.flex{
+    justify-content: center;
+}
+.fBettwen{
+    justify-content: space-between;
+}
+.fAround{
+    justify-content: space-around;
+}

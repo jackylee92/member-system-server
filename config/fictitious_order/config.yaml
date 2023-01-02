@@ -1,0 +1,55 @@
+# 配置文件方式 file/apollo
+config: file
+# 环境local/dev/test/uat/prod
+env: prod
+
+# 系统配置
+sys_app_name: video-admin
+# 启动端口
+sys_port: 8010
+# 是否开启调试模式
+sys_debug: true
+# 日志目录 没有或者为空 默认保存在storage/log中
+sys_log_dir:
+# 记录日志级别 debug/info/warn/error
+sys_log_level: debug
+# 是否开启请求日志 1:开启请求 2:开启请求+返回日志 0:不记录
+sys_request_log: 2
+# curl日志
+util_curl_log: true
+# 是否允许跨域
+sys_http_allow_cross_domain: true
+# 语言
+sys_language: zh
+# 是否返回uniqId
+sys_return_uniqid: true
+# pprof开启关闭
+sys_pprof: true
+# 参与 session cookie 盐
+cookid_session_salt: ljd
+# 用户密码加密 盐
+password_salt: ljd
+# 参与jwt 盐
+jwt_salt: ljd
+# jwt 过期时间 单位:秒
+jwt_expire_duration: 3000
+# header jwt key
+jwt_header_name: X-Token
+
+##### MySQL
+# 数据库配置
+sys_mysql:
+  default: "root:root@tcp(127.0.0.1:3306)/video?charset=utf8mb4&parseTime=True&loc=Local"
+# 开启Mysql日志
+sys_mysql_log: info
+
+#### 邮件
+default_email_host: "smtp.qiye.aliyun.com"
+default_email_port: 465
+default_email_from: "sys@bb-dd.com"
+default_email_username: "sys@bb-dd.com"
+default_email_password: "Li568915010"
+# default_email_password: "8442b449a8c713742b00"
+
+register_code_on_off: true
+invitation_code_on_off: true

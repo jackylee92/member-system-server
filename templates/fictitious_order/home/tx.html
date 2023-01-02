@@ -1,0 +1,174 @@
+{{ define "home/tx.html" }}
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="styleSheet" href="/assets/fictitious_order/css/common.css"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{.title}}</title>
+    <link type="text/css" rel="styleSheet" href="/assets/fictitious_order/css/index.css"/>
+</head>
+<body>
+<style>
+    .makeForm {
+        margin-left: 120px;
+        margin-right: 50px;
+        margin-top: 50PX;
+        width: calc(100% - 170px);
+    }
+
+    .makeFormItem label {
+        display: inline-block;
+        width: 75px;
+    }
+
+    .makeFormItem {
+        width: 290px;
+        display: inline-block;
+        margin-top: 20px;
+        float: left;
+        margin-left: 20px;
+        vertical-align:bottom;
+        overflow: hidden;
+        height: 35px;
+    }
+    .makeFormItemBtn{
+        text-align: right;
+        float: left;
+        width: 100%;
+    }
+    .foot{
+        position: inherit;
+
+    }
+</style>
+<div id="app">
+    <!-- 头部 -->
+    <div class="head fBettwen">
+        <img src="/assets/fictitious_order/img/{{.logo}}" style="	width: 300px;"/>
+        <div class="fCenter">
+            <div class="rightBox fBettwen">
+                <div>全部</div>
+                <img src="/assets/fictitious_order/img/down.png"/>
+            </div>
+            <div style="margin: 0 30px;text-align: center;">
+                <img src="/assets/fictitious_order/img/msk.png"/>
+            </div>
+        </div>
+    </div>
+    <!-- 侧边栏 -->
+    <div class="left">
+        <div class="fCenter" style="align-items: flex-start;">
+            <img src="/assets/fictitious_order/img/mine.png" style="margin-top: 15px;"/>
+            <div class="topUl">
+                <div style="font-size: 16px;">个人账户</div>
+                <div>账户总览</div>
+                <div>基本信息</div>
+                <div>我的合同</div>
+                <div>我的业务</div>
+            </div>
+            <img src="/assets/fictitious_order/img/down1.png" class="rightImg"/>
+        </div>
+        <div class="fCenter" style="align-items: flex-start;margin-top: 5px;">
+            <img src="/assets/fictitious_order/img/set.png" style="margin-top: 10px;"/>
+            <div class="topUl" style="color: #1E90FF;">
+                <div style="font-size: 16px;">订单管理</div>
+                <div>我的订单</div>
+            </div>
+            <img src="/assets/fictitious_order/img/down1.png" class="rightImg"/>
+        </div>
+        <div class="box flex">
+            <img src="/assets/fictitious_order/img/left.png"/>
+        </div>
+    </div>
+    <!-- 内容 -->
+    <div>
+        <div class="title">订单管理>查询流水</div>
+        <div class="fBettwen" style="margin-left: 220px;">
+            <div class="fCenter">
+                <div>查询条件</div>
+                <div class="select fBettwen">
+                    <div>按支付号码</div>
+                    <img src="/assets/fictitious_order/img/down.png"/>
+                </div>
+                <div class="codeBox"><span id="haoma1"></span></div>
+            </div>
+            <div class="btn">查询</div>
+        </div>
+        <div class="tabbel fCenter">
+            <div style="flex: 3;">流水单号</div>
+            <div class="two" style="flex: 1;">发货号码</div>
+            <div class="two" style="flex: 2;">交易时间</div>
+            <div class="two" style="flex: 2;">交易商品</div>
+            <div class="two" style="flex: 1;">面值</div>
+            <div class="two" style="flex: 1;">交易状态</div>
+        </div>
+        <div class="tabbel fCenter itemList">
+            <div style="flex: 3;"><span id="liushui"></span></div>
+            <div style="flex: 1;"><span id="haoma"></span></div>
+            <div style="flex: 2;"><span id="shijian"></span></div>
+            <div style="flex: 2;"><span id="ping"></span></div>
+            <div style="flex: 1;"><span id="mian"></span></div>
+            <div style="flex: 1;">已到账</div>
+        </div>
+    </div>
+
+
+    <!-- 底部 -->
+    <div class="foot fCenter"
+         style="margin-bottom: 100px;display: flex;flex-direction: column;align-items: flex-start; margin-left: 80px;">
+        <div class="makeForm">
+            <div class="makeFormItem">
+                <label>流水单号:</label>
+                <input placeholder="设置流水单号" id="setNum"/>
+                <a id="setnum" style="margin-bottom: -5px; overflow: hidden; width: 30px; height: 26px; display: inline-block;">
+                    <img src="/assets/fictitious_order/img/loadding_btn.png" style="width: 27px;" />
+                </a>
+            </div>
+            <div class="makeFormItem">
+                <label>充值号码:</label>
+                <input placeholder="设置号码" id="setCode" style="margin-right: 10px;"/>
+            </div>
+            <div class="makeFormItem">
+                <label>充值时间:</label>
+                <input placeholder="设置时间"  id="time1" style="margin-right: 10px;"/>
+            </div>
+
+
+            <div class="makeFormItem">
+                <label>选择商品:</label>
+                <select id="ping1" style="margin: 0 20px;height: 26px;">
+                    {{ range $value := .productList }}
+                    <option value="{{$value}}">{{$value}}</option>
+                    {{ end }}
+                </select>
+            </div>
+            <div class="makeFormItem">
+                <label>自定义商品:</label>
+                <input placeholder="商品" id="ping2" v-model="" style="margin-right: 20px;"/>
+            </div>
+            <div class="makeFormItem">
+                <label>面值:</label>
+                <input type="number" placeholder="设置面值" id="mian1" style="margin-right: 10px ;width: 50px " value="10">
+            </div>
+            <div class="makeFormItemBtn">
+                <button id="set">设置</button>
+            </div>
+        </div>
+        <div style="width: calc(100% - 120px);margin-left: 111px; color: red;margin-top: 20px;font-weight: 600;font-size: 20px;">{{.disclaimer}}</div>
+    </div>
+</div>
+</body>
+<script src="/assets/fictitious_order/js/common.js"></script>
+<script type="text/javascript" src="/assets/date_time/laydate.dev.js"></script>
+<script type="text/javascript">
+    laydate({
+        elem: '#time1',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        istime: true
+    });
+</script>
+</html>
+{{ end }}
