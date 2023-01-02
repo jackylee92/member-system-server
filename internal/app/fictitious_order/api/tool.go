@@ -4,12 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/util/rgtime"
+	"member_system-system/internal/app/fictitious_order/common"
+	"member_system-system/internal/app/fictitious_order/validator"
+	"member_system-system/pkg/mysql"
+	"member_system-system/pkg/mysql/member_system"
+	"member_system-system/pkg/random_code"
 	"time"
-	"video-admin/internal/app/fictitious_order/common"
-	"video-admin/internal/app/fictitious_order/validator"
-	"video-admin/pkg/mysql"
-	"video-admin/pkg/mysql/video"
-	"video-admin/pkg/random_code"
 )
 
 type RegisterCodeClient struct {
@@ -58,12 +58,12 @@ func (m *RegisterCodeClient) Send() (err error) {
 
 func (m *RegisterCodeClient) Save() (err error) {
 	expireTime := time.Unix(m.ExpireTime, 64)
-	model := video.ValidCode{
-		Code:    m.Code,
-		Phone:   m.To,
-		Status:  1,
-		MsgType: 1,
-		Msg:     m.Msg,
+	model := member_system.ValidCode{
+		Code:       m.Code,
+		Phone:      m.To,
+		Status:     1,
+		MsgType:    1,
+		Msg:        m.Msg,
 		ExpireTime: mysql.Time(expireTime),
 	}
 	return model.Create(m.This)

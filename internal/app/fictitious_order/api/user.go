@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
-	"video-admin/internal/app/fictitious_order/common"
-	"video-admin/internal/app/fictitious_order/validator"
-	"video-admin/pkg/jwt"
-	"video-admin/pkg/mysql/video"
+	"member_system-system/internal/app/fictitious_order/common"
+	"member_system-system/internal/app/fictitious_order/validator"
+	"member_system-system/pkg/jwt"
+	"member_system-system/pkg/mysql/member_system"
 )
 
 const (
@@ -42,12 +42,12 @@ type LoginRsp struct {
 }
 
 type UserInfoRsp struct {
-	Username     string `json:"username"`
-	Nickname     string `json:"name"`
+	Username     string   `json:"username"`
+	Nickname     string   `json:"name"`
 	Roles        []string `json:"roles"`
-	Introduction string `json:"introduction"`
-	Avatar       string `json:"avatar"`
-	Id           int `json:"id"`
+	Introduction string   `json:"introduction"`
+	Avatar       string   `json:"avatar"`
+	Id           int      `json:"id"`
 }
 
 func CheckLogin(this *rgrequest.Client) (res bool, userInfo UserInfo, token string) {
@@ -114,7 +114,7 @@ func (u *UserInfo) login(this *rgrequest.Client) (token string, err error) {
 	if u.Username == "" || u.Password == "" {
 		return token, errors.New("登录失败，用户名密码为空")
 	}
-	userAccountModel := video.UserAccount{Username: u.Username, Password: u.Password}
+	userAccountModel := member_system.UserAccount{Username: u.Username, Password: u.Password}
 	err = userAccountModel.GetUserInfoByAccount(this)
 	this.Log.Debug("userAccountModel.GetUserInfoByAccount", userAccountModel)
 	if err != nil {
@@ -125,12 +125,12 @@ func (u *UserInfo) login(this *rgrequest.Client) (token string, err error) {
 		return token, errors.New("登录失败，用户名或者密码错误")
 	}
 	if userAccountModel.Status != 1 {
-		return token, errors.New("登录失败，非启用状态【" + video.StatusVal(userAccountModel.Status) + "】")
+		return token, errors.New("登录失败，非启用状态【" + member_system.StatusVal(userAccountModel.Status) + "】")
 	}
 	u.Id = userAccountModel.ID
 	jwtData := jwt.LoginData{
-		Login: true,
-		UserId: u.Id,
+		Login:    true,
+		UserId:   u.Id,
 		Username: u.Username,
 	}
 	token, err = jwt.GetToken(this, jwtData)
@@ -142,7 +142,7 @@ func (u *UserInfo) login(this *rgrequest.Client) (token string, err error) {
 }
 
 func (u *UserInfo) saveLoginLog(this *rgrequest.Client, req validator.LoginReq, msg string) {
-	var logData video.UserLog
+	var logData member_system.UserLog
 	logData.UserID = u.Id
 	logData.Type = 1
 	logData.Action = "LoginHandle"
@@ -175,7 +175,7 @@ func LogOutHandle(ctx *gin.Context) {
 }
 
 func (u *UserInfo) saveLogoutLog(this *rgrequest.Client) {
-	var logData video.UserLog
+	var logData member_system.UserLog
 	logData.UserID = u.Id
 	logData.Type = 2
 	logData.Action = "LogoutHandle"
@@ -203,14 +203,14 @@ func RegisterHandle(ctx *gin.Context) {
 		return
 	}
 	if rgconfig.GetBool(common.RegisterCodeOnOffConfig) {
-		go video.UseCodeById(this, req.ValidCodeID)
+		go member_system.UseCodeById(this, req.ValidCodeID)
 	}
 	this.Response.ReturnSuccess(nil)
 	return
 }
 
 func (m *UserInfo) Register(this *rgrequest.Client) (err error) {
-	model := video.UserAccount{
+	model := member_system.UserAccount{
 		Username: m.Username,
 	}
 	exist, err := model.ExistUsername(this)
@@ -242,11 +242,11 @@ func ForgetPasswordHandle(ctx *gin.Context) {
 func GetUserInfoHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	userInfo := UserInfo{
-		Id: 1,
-		Nickname: "ljd",
-		Roles: []string{"admin"},
+		Id:           1,
+		Nickname:     "ljd",
+		Roles:        []string{"admin"},
 		Introduction: "接口返回",
-		Avatar: "",
+		Avatar:       "",
 	}
 	this.Response.ReturnSuccess(getUserInfoRsp(userInfo))
 }

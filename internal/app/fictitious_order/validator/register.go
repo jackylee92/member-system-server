@@ -6,8 +6,8 @@ import (
 	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/core/rgrouter"
-	"video-admin/internal/app/fictitious_order/common"
-	"video-admin/internal/app/fictitious_order/middleware/check_valid_code"
+	"member_system-system/internal/app/fictitious_order/common"
+	"member_system-system/internal/app/fictitious_order/middleware/check_valid_code"
 )
 
 /*

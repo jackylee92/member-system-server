@@ -1,4 +1,4 @@
-module video-admin
+module member_system-system
 
 go 1.17
 
@@ -9,6 +9,7 @@ require (
 
 require (
 	github.com/gin-contrib/sessions v0.0.5
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.530
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.530
 	gorm.io/gorm v1.23.6
@@ -24,7 +25,6 @@ require (
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect

@@ -4,7 +4,7 @@ config: file
 env: prod
 
 # 系统配置
-sys_app_name: video-admin
+sys_app_name: member-system-server
 # 启动端口
 sys_port: 8010
 # 是否开启调试模式
@@ -39,7 +39,7 @@ jwt_header_name: X-Token
 ##### MySQL
 # 数据库配置
 sys_mysql:
-  default: "root:root@tcp(127.0.0.1:3306)/video?charset=utf8mb4&parseTime=True&loc=Local"
+  default: "root:root@tcp(127.0.0.1:3306)/member-system?charset=utf8mb4&parseTime=True&loc=Local"
 # 开启Mysql日志
 sys_mysql_log: info
 

@@ -1,24 +1,24 @@
-package video
+package member_system
 
 import (
 	"errors"
 	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
-	"video-admin/internal/app/fictitious_order/common"
-	"video-admin/pkg/mysql"
+	"member_system-system/internal/app/fictitious_order/common"
+	"member_system-system/pkg/mysql"
 )
 
 // UserAccount [...]
 type UserAccount struct {
-	ID         int       `gorm:"primaryKey;column:id;type:int(10);not null"`
-	Username   string    `gorm:"column:username;type:varchar(100);not null;default:''"`
-	Password   string    `gorm:"column:password;type:varchar(150);not null;default:''"`
-	Status     int8      `gorm:"column:status;type:tinyint(2);not null;default:0"`
+	ID         int        `gorm:"primaryKey;column:id;type:int(10);not null"`
+	Username   string     `gorm:"column:username;type:varchar(100);not null;default:''"`
+	Password   string     `gorm:"column:password;type:varchar(150);not null;default:''"`
+	Status     int8       `gorm:"column:status;type:tinyint(2);not null;default:0"`
 	CreateTime mysql.Time `gorm:"column:create_time;type:datetime;not null"`
 	UpdateTime mysql.Time `gorm:"column:update_time;type:datetime;not null"`
-	Nickname   string    `gorm:"column:nickname;type:varchar(255);not null;default:''"`
-	DeleteFlag int8      `gorm:"column:delete_flag;type:tinyint(2);not null;default:0"`
+	Nickname   string     `gorm:"column:nickname;type:varchar(255);not null;default:''"`
+	DeleteFlag int8       `gorm:"column:delete_flag;type:tinyint(2);not null;default:0"`
 }
 
 var statusValue = map[int8]string{
@@ -43,7 +43,7 @@ func (m *UserAccount) AfterCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (m *UserAccount) BeforeUpdate(tx *gorm.DB)(err error) {
+func (m *UserAccount) BeforeUpdate(tx *gorm.DB) (err error) {
 	m.UpdateTime = mysql.NowTime()
 	return
 }
@@ -65,7 +65,7 @@ func (m *UserAccount) Find(param mysql.SearchParam) (exists bool, err error) {
 	return true, mm.Error
 }
 
-func (m *UserAccount)Create(this *rgrequest.Client)(err error){
+func (m *UserAccount) Create(this *rgrequest.Client) (err error) {
 	model, err := this.Mysql.New("")
 	if err != nil {
 		return err
@@ -101,7 +101,7 @@ func StatusVal(status int8) string {
 	return value
 }
 
-func (m *UserAccount)ExistUsername(this *rgrequest.Client) (exist bool, err error) {
+func (m *UserAccount) ExistUsername(this *rgrequest.Client) (exist bool, err error) {
 	if len(m.Username) == 0 {
 		return false, errors.New("username为空")
 	}

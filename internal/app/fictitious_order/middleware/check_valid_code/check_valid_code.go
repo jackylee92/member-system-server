@@ -3,7 +3,7 @@ package check_valid_code
 import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/util/rgtime"
-	"video-admin/pkg/mysql/video"
+	"member_system-system/pkg/mysql/member_system"
 )
 
 /*
@@ -12,8 +12,8 @@ import (
  * @Time    : 2022-11-06$
  */
 
-func CheckValidRegisterCode(this *rgrequest.Client, phone, code string)(id int, res bool, err error) {
-	model := video.ValidCode{Phone: phone}
+func CheckValidRegisterCode(this *rgrequest.Client, phone, code string) (id int, res bool, err error) {
+	model := member_system.ValidCode{Phone: phone}
 	err = model.GetCodeByPhone(this)
 	if err != nil {
 		return id, res, err

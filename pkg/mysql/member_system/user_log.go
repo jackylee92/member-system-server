@@ -1,9 +1,9 @@
-package video
+package member_system
 
 import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
-	"video-admin/pkg/mysql"
+	"member_system-system/pkg/mysql"
 )
 
 // UserLog [...]
@@ -36,7 +36,7 @@ func (m *UserLog) AfterCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (m *UserLog) BeforeUpdate(tx *gorm.DB)(err error) {
+func (m *UserLog) BeforeUpdate(tx *gorm.DB) (err error) {
 	m.UpdateTime = mysql.NowTime()
 	return
 }

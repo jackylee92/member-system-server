@@ -1,10 +1,10 @@
-package video
+package member_system
 
 import (
 	"errors"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
-	"video-admin/pkg/mysql"
+	"member_system-system/pkg/mysql"
 )
 
 // ValidCode 验证码记录表

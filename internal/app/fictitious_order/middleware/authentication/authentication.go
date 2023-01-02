@@ -3,8 +3,8 @@ package authentication
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackylee92/rgo/core/rgrequest"
-	"video-admin/internal/app/fictitious_order/api"
-	"video-admin/internal/app/fictitious_order/message"
+	"member_system-system/internal/app/fictitious_order/api"
+	"member_system-system/internal/app/fictitious_order/message"
 )
 
 /*

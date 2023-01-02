@@ -3,8 +3,8 @@ package email
 import (
 	"github.com/jackylee92/rgo"
 	"log"
+	"member_system-system/pkg/email/email_default"
 	"testing"
-	"video-admin/pkg/email/email_default"
 )
 
 /*
@@ -24,9 +24,9 @@ func TestEmailCode(t *testing.T) {
 	this := rgo.This
 	content := "你好"
 	emailClient := email_default.Client{
-		This: this,
+		This:     this,
 		ToEmails: []string{"568915010@qq.com"},
-		Content: content,
+		Content:  content,
 	}
 	err := emailClient.SendCode()
 	log.Println("error: ", err)

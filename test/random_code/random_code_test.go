@@ -1,10 +1,10 @@
 package email
 
 import (
-	"log"
-	"testing"
-	"video-admin/pkg/random_code"
 	_ "github.com/jackylee92/rgo"
+	"log"
+	"member_system-system/pkg/random_code"
+	"testing"
 )
 
 /*

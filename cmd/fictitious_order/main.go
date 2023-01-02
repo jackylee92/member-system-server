@@ -3,7 +3,7 @@ package main
 import (
 	_ "github.com/jackylee92/rgo"
 	"github.com/jackylee92/rgo/core/rgrouter"
-	"video-admin/route/fictitious_order"
+	"member_system-system/route/fictitious_order"
 )
 
 /*
@@ -12,8 +12,7 @@ import (
  * @Time    : 2022-09-11$
  */
 
-
-func main(){
+func main() {
 	r := fictitious_order.GetRouter()
 	rgrouter.Run(r)
 }
