@@ -9,12 +9,12 @@ import (
 	"github.com/jackylee92/rgo/core/rgglobal/rgconst"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/core/rgrouter"
-	"member_system-system/internal/app/fictitious_order/api"
-	"member_system-system/internal/app/fictitious_order/common"
-	"member_system-system/internal/app/fictitious_order/message"
-	"member_system-system/internal/app/fictitious_order/middleware/app_lock"
-	"member_system-system/internal/app/fictitious_order/middleware/authentication"
-	"member_system-system/internal/app/fictitious_order/validator"
+	"member-system-server/internal/app/fictitious_order/api"
+	"member-system-server/internal/app/fictitious_order/common"
+	"member-system-server/internal/app/fictitious_order/message"
+	"member-system-server/internal/app/fictitious_order/middleware/app_lock"
+	"member-system-server/internal/app/fictitious_order/middleware/authentication"
+	"member-system-server/internal/app/fictitious_order/validator"
 )
 
 //var f embed.FS

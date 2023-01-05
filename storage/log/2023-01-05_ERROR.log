@@ -1,0 +1,2 @@
+2023-01-05 17:47:19 | ERROR | /Users/adong/Dev/Golang/src/member-system-server/internal/app/fictitious_order/api/user.go:61| CheckLogin Error | {"Login":false,"UserId":"","Username":""} | 令牌错误！| UniqId:cer9p9t94811m6ibhsjg
+2023-01-05 17:48:04 | ERROR | /Users/adong/Dev/Golang/src/member-system-server/internal/app/fictitious_order/api/user.go:61| CheckLogin Error | {"Login":false,"UserId":"","Username":""} | Token无效| UniqId:cer9pl594811mg10s57g

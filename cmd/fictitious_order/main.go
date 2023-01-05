@@ -3,7 +3,7 @@ package main
 import (
 	_ "github.com/jackylee92/rgo"
 	"github.com/jackylee92/rgo/core/rgrouter"
-	"member_system-system/route/fictitious_order"
+	"member-system-server/route/fictitious_order"
 )
 
 /*

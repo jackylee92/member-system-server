@@ -4,11 +4,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/util/rgtime"
-	"member_system-system/internal/app/fictitious_order/common"
-	"member_system-system/internal/app/fictitious_order/validator"
-	"member_system-system/pkg/mysql"
-	"member_system-system/pkg/mysql/member_system"
-	"member_system-system/pkg/random_code"
+	"member-system-server/internal/app/fictitious_order/common"
+	"member-system-server/internal/app/fictitious_order/validator"
+	"member-system-server/pkg/mysql"
+	"member-system-server/pkg/mysql/member_system"
+	"member-system-server/pkg/random_code"
 	"time"
 )
 

@@ -30,16 +30,16 @@ cookid_session_salt: ljd
 # 用户密码加密 盐
 password_salt: ljd
 # 参与jwt 盐
-jwt_salt: ljd
+jwt_salt: ljd@jacky@0230@balabala*&!
 # jwt 过期时间 单位:秒
-jwt_expire_duration: 3000
+jwt_expire_duration: 30
 # header jwt key
 jwt_header_name: X-Token
 
 ##### MySQL
 # 数据库配置
 sys_mysql:
-  default: "root:root@tcp(127.0.0.1:3306)/member-system?charset=utf8mb4&parseTime=True&loc=Local"
+  default: "root:root@tcp(127.0.0.1:3306)/member_system?charset=utf8mb4&parseTime=True&loc=Local"
 # 开启Mysql日志
 sys_mysql_log: info
 

@@ -3,7 +3,7 @@ package member_system
 import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
-	"member_system-system/pkg/mysql"
+	"member-system-server/pkg/mysql"
 )
 
 // UserLog [...]

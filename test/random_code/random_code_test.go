@@ -3,7 +3,7 @@ package email
 import (
 	_ "github.com/jackylee92/rgo"
 	"log"
-	"member_system-system/pkg/random_code"
+	"member-system-server/pkg/random_code"
 	"testing"
 )
 

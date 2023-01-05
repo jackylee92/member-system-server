@@ -1,4 +1,4 @@
-module member_system-system
+module member-system-server
 
 go 1.17
 

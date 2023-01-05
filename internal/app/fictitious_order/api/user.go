@@ -8,10 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
-	"member_system-system/internal/app/fictitious_order/common"
-	"member_system-system/internal/app/fictitious_order/validator"
-	"member_system-system/pkg/jwt"
-	"member_system-system/pkg/mysql/member_system"
+	"member-system-server/internal/app/fictitious_order/common"
+	"member-system-server/internal/app/fictitious_order/validator"
+	"member-system-server/pkg/jwt"
+	"member-system-server/pkg/mysql/member_system"
+	"strconv"
 )
 
 const (
@@ -51,29 +52,23 @@ type UserInfoRsp struct {
 }
 
 func CheckLogin(this *rgrequest.Client) (res bool, userInfo UserInfo, token string) {
-	session := sessions.Default(this.Ctx)
-	isLoginITF := session.Get(sessionIsLoginKey)
-	this.Log.Info("isLogin", isLoginITF)
-	if isLoginITF == nil {
+	token = this.Ctx.Query("token")
+	if token == "" {
 		return false, userInfo, token
 	}
-	isLogin, ok := isLoginITF.(bool)
-	if !ok {
+	jwtData, err := jwt.ParseToken(this, token)
+	if err != nil {
+		this.Log.Error("CheckLogin Error", jwtData, err)
 		return false, userInfo, token
 	}
-	if !isLogin {
+	userId, err := strconv.Atoi(jwtData.UserId)
+	if err != nil {
+		this.Log.Error("从JWT中解析用户ID失败", jwtData, err)
 		return false, userInfo, token
 	}
-	userInfoITF := session.Get(sessionUserInfo)
-	if userInfoITF == nil {
-		return false, userInfo, token
-	}
-	userInfo, ok = userInfoITF.(UserInfo)
-	if !ok {
-		return false, userInfo, token
-	}
-	token = session.ID()
-	return true, userInfo, token
+	userInfo.Id = userId
+	userInfo.Username = jwtData.Username
+	return jwtData.Login, userInfo, token
 }
 
 func LoginHandle(c *gin.Context) {
@@ -130,7 +125,7 @@ func (u *UserInfo) login(this *rgrequest.Client) (token string, err error) {
 	u.Id = userAccountModel.ID
 	jwtData := jwt.LoginData{
 		Login:    true,
-		UserId:   u.Id,
+		UserId:   strconv.Itoa(u.Id),
 		Username: u.Username,
 	}
 	token, err = jwt.GetToken(this, jwtData)

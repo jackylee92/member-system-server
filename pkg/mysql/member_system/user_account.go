@@ -5,8 +5,8 @@ import (
 	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
-	"member_system-system/internal/app/fictitious_order/common"
-	"member_system-system/pkg/mysql"
+	"member-system-server/internal/app/fictitious_order/common"
+	"member-system-server/pkg/mysql"
 )
 
 // UserAccount [...]

@@ -3,7 +3,7 @@ package check_valid_code
 import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/util/rgtime"
-	"member_system-system/pkg/mysql/member_system"
+	"member-system-server/pkg/mysql/member_system"
 )
 
 /*
