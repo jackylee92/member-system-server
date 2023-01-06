@@ -172,8 +172,9 @@ func (m *Info) Register(this *rgrequest.Client) (userId int, err error) {
 
 	// <LiJunDong : 2023-01-06 14:00:26> --- 用户信息
 	userInfoModel := member_system.UserInfo{
-		Username: m.Username,
-		Status:   m.Status,
+		Username:   m.Username,
+		Status:     m.Status,
+		DeleteFlag: 0,
 	}
 	err = userInfoModel.Create(this)
 	if err != nil {

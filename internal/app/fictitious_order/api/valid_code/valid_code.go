@@ -63,11 +63,18 @@ func (m *ValidCodeClient) send() (err error) {
 
 func (m *ValidCodeClient) save() (err error) {
 	expireTime := time.Unix(m.ExpireTime, 64)
+	var phone, email string
+	if m.Typ == common.SendTypePhone {
+		phone = m.To
+	} else if m.Typ == common.SendTypeEmail {
+		email = m.To
+	}
 	model := member_system.ValidCode{
 		Code:       m.Code,
-		Phone:      m.To,
-		Status:     1,
-		MsgType:    1,
+		Phone:      phone,
+		Email:      email,
+		Status:     member_system.ValidCodeDefaultStatus,
+		MsgType:    member_system.ValidCodeMsgTypeRegister,
 		Msg:        m.Msg,
 		ExpireTime: mysql.Time(expireTime),
 	}

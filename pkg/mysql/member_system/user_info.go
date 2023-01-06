@@ -3,6 +3,7 @@ package member_system
 import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
+	"log"
 	"member-system-server/pkg/mysql"
 )
 
@@ -30,9 +31,10 @@ var userInfoStatusValue = map[int8]string{
 
 // TODO <LiJunDong : 2023-01-06 19:27:18> --- 好像无效
 func (m *UserInfo) BeforeCreate(tx *gorm.DB) (err error) {
+	log.Println("BeforeCreate----")
 	m.CreateTime = mysql.NowTime()
 	m.UpdateTime = mysql.NowTime()
-	m.DeleteFlag = 0
+	m.DeleteFlag = mysql.NoDelete
 	return
 }
 

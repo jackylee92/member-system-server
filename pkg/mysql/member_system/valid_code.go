@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
+	"log"
 	"member-system-server/pkg/mysql"
 	"strconv"
 )
@@ -32,6 +33,9 @@ func (m *ValidCode) TableName() string {
 var UsableValidCodeStatus int8 = 1 // 可用状态
 var UsedValidCodeStatus int8 = 2   // 已用状态
 
+var ValidCodeMsgTypeRegister int8 = 1 // 注册类型
+var ValidCodeDefaultStatus int8 = 1   // 默认状态
+
 func (m *ValidCode) BeforeCreate(tx *gorm.DB) (err error) {
 	m.CreateTime = mysql.NowTime()
 	m.UpdateTime = mysql.NowTime()
@@ -43,8 +47,14 @@ func (m *ValidCode) AfterCreate(tx *gorm.DB) (err error) {
 	return
 }
 
+// BeforeUpdate 失败原因应该是 更改的数据并没有绑定在m上面，而是绑定在map[string]interface中
 func (m *ValidCode) BeforeUpdate(tx *gorm.DB) (err error) {
+	log.Println("BeforeCreate----------")
 	m.UpdateTime = mysql.NowTime()
+	return
+}
+
+func (m *ValidCode) AfterUpdate(tx *gorm.DB) (err error) {
 	return
 }
 
