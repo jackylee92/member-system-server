@@ -12,8 +12,8 @@ import (
  * @Time    : 2022-09-14$
  */
 type LoginReq struct {
-	Username string `form:"username" binding:"required"`
-	Password string `form:"password" binding:"required"`
+	Account  string `json:"account" binding:"required" label:"账号"`
+	Password string `json:"password" binding:"required" label:"密码"`
 }
 
 func CheckLoginParam(c *gin.Context) {

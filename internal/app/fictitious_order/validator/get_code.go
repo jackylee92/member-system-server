@@ -12,7 +12,7 @@ import (
  * @Time    : 2022-09-14$
  */
 type GetCodeReq struct {
-	Phone string `form:"phone" binding:"required"`
+	Phone string `form:"phone" binding:"required" label:"手机号"`
 }
 
 func CheckGetCodeParam(c *gin.Context) {
@@ -29,8 +29,7 @@ func CheckGetCodeParam(c *gin.Context) {
 	c.Next()
 }
 
-// TODO <LiJunDong : 2022-11-06 16:03:57> --- 未实现
-
+// HighFrequencyRequestLock <LiJunDong : 2022-11-06 16:03:57> --- 未实现 控制请求频率
 func HighFrequencyRequestLock(c *gin.Context) {
 	c.Next()
 }

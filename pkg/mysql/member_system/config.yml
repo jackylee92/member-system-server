@@ -14,7 +14,7 @@ is_null_to_point: false # 数据库默认 'DEFAULT NULL' 时设置结构为指�
 is_web_tag: false
 is_web_tag_pk_hidden: false
 table_prefix: "" #表前缀
-table_names: "valid_code" #指定表生成，多个表用,隔开
+table_names: "user_role" #指定表生成，多个表用,隔开
 is_column_name: false # 是否生成列名
 is_out_file_by_table_name: true # 是否根据表名生成多个model
 db_info:
@@ -22,7 +22,7 @@ db_info:
   port : 3306
   username : "root"
   password : "root"
-  database : "video"
+  database : "member_system"
   type: 0 # 数据库类型:0:mysql , 1:sqlite , 2:mssql
 self_type_define: # 自定义数据类型映射
   datetime: time.Time

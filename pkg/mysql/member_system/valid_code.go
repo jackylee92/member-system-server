@@ -5,6 +5,7 @@ import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
 	"member-system-server/pkg/mysql"
+	"strconv"
 )
 
 // ValidCode 验证码记录表
@@ -17,10 +18,10 @@ type ValidCode struct {
 	Phone      string     `gorm:"column:phone;type:varchar(20);default:null"`             // 手机号
 	MsgType    int8       `gorm:"column:msg_type;type:tinyint(2);default:null;default:0"` // 消息类型 0：未知 1：注册code
 	Msg        string     `gorm:"column:msg;type:varchar(255);default:null"`              // 消息内容
+	UpdateTime mysql.Time `gorm:"column:update_time;type:datetime;default:null"`          // 更新时间
 	ExpireTime mysql.Time `gorm:"column:expire_time;type:datetime;default:null"`          // 过期时间
 	CreateTime mysql.Time `gorm:"column:create_time;type:datetime;not null"`              // 创建时间
-	UpdateTime mysql.Time `gorm:"column:update_time;type:datetime;default:null"`          // 更新时间
-	DeleteFlag int8       `gorm:"column:delete_flag;type:tinyint(2);not null;default:0"`  // 虚拟删除 0：未删除 1：已删除
+	DeleteFlag int8       `gorm:"column:delete_flag;type:tinyint(2);default:null;default:0"`
 }
 
 // TableName get sql table name.获取数据库表名
@@ -28,10 +29,13 @@ func (m *ValidCode) TableName() string {
 	return "valid_code"
 }
 
+var UsableValidCodeStatus int8 = 1 // 可用状态
+var UsedValidCodeStatus int8 = 2   // 已用状态
+
 func (m *ValidCode) BeforeCreate(tx *gorm.DB) (err error) {
 	m.CreateTime = mysql.NowTime()
 	m.UpdateTime = mysql.NowTime()
-	m.DeleteFlag = 0
+	m.DeleteFlag = mysql.NoDelete
 	return
 }
 
@@ -58,7 +62,7 @@ func (m *ValidCode) Find(param mysql.SearchParam) (exists bool, err error) {
 	if err != nil {
 		return exists, err
 	}
-	param.Query += " AND delete_flag = 0"
+	param.Query += " AND delete_flag = " + strconv.Itoa(int(mysql.NoDelete))
 	mm := model.Db.Table(m.TableName()).Where(param.Query, param.Args...)
 	if param.Fields != nil && len(param.Fields) != 0 {
 		mm = mm.Select(param.Fields)
@@ -97,7 +101,22 @@ func (m *ValidCode) GetCodeByPhone(this *rgrequest.Client) (err error) {
 	return err
 }
 
-func UseCodeById(this *rgrequest.Client, id int) (err error) {
+func (m *ValidCode) GetCodeByEmail(this *rgrequest.Client) (err error) {
+	if len(m.Phone) == 0 {
+		return errors.New("phone is nil")
+	}
+	searchParam := mysql.SearchParam{
+		This:   this,
+		Query:  "email = ?",
+		Args:   []interface{}{m.Email},
+		Fields: []string{"id", "code", "expire_time", "status"},
+		Order:  "id DESC",
+	}
+	_, err = m.Find(searchParam)
+	return err
+}
+
+func UseValidCodeById(this *rgrequest.Client, id int) (err error) {
 	model := ValidCode{}
 	searchParam := mysql.SearchParam{
 		This:  this,
@@ -105,7 +124,8 @@ func UseCodeById(this *rgrequest.Client, id int) (err error) {
 		Args:  []interface{}{id},
 	}
 	data := map[string]interface{}{
-		"status": 2,
+		"status":      UsedValidCodeStatus,
+		"update_time": mysql.NowTime(),
 	}
 	c, err := model.Update(searchParam, data)
 	if err != nil {

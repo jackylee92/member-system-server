@@ -25,14 +25,12 @@ sys_language: zh
 sys_return_uniqid: true
 # pprof开启关闭
 sys_pprof: true
-# 参与 session cookie 盐
-cookid_session_salt: ljd
 # 用户密码加密 盐
 password_salt: ljd
 # 参与jwt 盐
 jwt_salt: ljd@jacky@0230@balabala*&!
 # jwt 过期时间 单位:秒
-jwt_expire_duration: 30
+jwt_expire_duration: 3000
 # header jwt key
 jwt_header_name: X-Token
 

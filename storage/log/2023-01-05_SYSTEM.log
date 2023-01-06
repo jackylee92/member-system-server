@@ -374,3 +374,56 @@ runtime error: invalid memory address or nil pointer dereference
 2023-01-05 17:56:32 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
 2023-01-05 17:56:32 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
 2023-01-05 19:11:17 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 19:36:55 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 19:36:55 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 19:36:55 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 19:36:55 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 19:36:55 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
+2023-01-05 20:04:41 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 20:04:45 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 20:04:45 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 20:04:45 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 20:04:45 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 20:04:45 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
+2023-01-05 20:07:07 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 20:07:11 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 20:07:11 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 20:07:11 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 20:07:11 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 20:07:11 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
+2023-01-05 20:07:48 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 20:07:51 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 20:07:51 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 20:07:51 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 20:07:51 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 20:07:51 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
+2023-01-05 20:08:29 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 20:08:31 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 20:08:31 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 20:08:31 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 20:08:31 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 20:08:31 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
+2023-01-05 20:09:01 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 20:09:03 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 20:09:03 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 20:09:03 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 20:09:03 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 20:09:03 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
+2023-01-05 20:17:24 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 20:17:27 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 20:17:27 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 20:17:27 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 20:17:27 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 20:17:27 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
+2023-01-05 20:31:46 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 20:32:08 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 20:32:08 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 20:32:08 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 20:32:08 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 20:32:08 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|
+2023-01-05 20:38:45 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgdestroy/rgdestroy.go:18| 收到信号，进程被结束 | 信号值:interrupt|
+2023-01-05 20:38:50 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgmysql/rgmysql.go:113| 启动项【mysql】 | 【default】 | :成功|
+2023-01-05 20:38:50 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/init.go:53| 启动项【rgo-init】:成功|
+2023-01-05 20:38:50 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:32| 启动项【debug】:成功|
+2023-01-05 20:38:50 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgpprof/rgpprof.go:25| 启动项【pprof】:成功|
+2023-01-05 20:38:50 | SYSTEMINFO| /Users/adong/Dev/Golang/pkg/mod/github.com/jackylee92/rgo@v1.0.11/core/rgrouter/rgrouter.go:58| 启动项【port】:8010|

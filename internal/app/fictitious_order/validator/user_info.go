@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/core/rgrouter"
-	"log"
 )
 
 /*
@@ -13,11 +12,10 @@ import (
  * @Time    : 2022-09-14$
  */
 type GetUserInfoReq struct {
-	Id string `form:"id" binding:"required"`
+	//Id string `form:"id" binding:"required"`
 }
 
 func CheckGetUserInfoParam(c *gin.Context) {
-	log.Println(3333)
 	this := rgrequest.Get(c)
 	var param GetUserInfoReq
 	err := c.ShouldBind(&param)

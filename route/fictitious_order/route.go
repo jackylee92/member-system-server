@@ -1,16 +1,10 @@
 package fictitious_order
 
 import (
-	//assetfs "github.com/elazarl/go-bindata-assetfs"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"github.com/jackylee92/rgo/core/rgconfig"
-	"github.com/jackylee92/rgo/core/rgglobal/rgconst"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/core/rgrouter"
 	"member-system-server/internal/app/fictitious_order/api"
-	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/internal/app/fictitious_order/message"
 	"member-system-server/internal/app/fictitious_order/middleware/app_lock"
 	"member-system-server/internal/app/fictitious_order/middleware/authentication"
@@ -22,14 +16,12 @@ import (
 func GetRouter() *gin.Engine {
 	registerValidation()
 	router := rgrouter.NewRouter()
-	store := cookie.NewStore([]byte(rgconfig.GetStr(common.CookieSessionSaltKey)))
-	router.Use(sessions.Sessions(rgconfig.GetStr(rgconst.ConfigKeyAppName), store))
 
 	publicGroup := router.Group("/public")
 	{
 		publicGroup.GET("/lock", api.LockHandle)
 		publicGroup.POST("/login", validator.CheckLoginParam, api.LoginHandle)
-		publicGroup.POST("/register", validator.CheckRegisterParam, validator.ValidateRegisterCode, api.RegisterHandle)
+		publicGroup.POST("/register", validator.CheckRegisterParam, api.RegisterHandle)
 		publicGroup.GET("/get_code", validator.CheckGetCodeParam, validator.HighFrequencyRequestLock, api.GetCodeHandle)
 		publicGroup.GET("/forget_password", validator.CheckForgetPasswordParam, api.ForgetPasswordHandle)
 	}

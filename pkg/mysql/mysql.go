@@ -11,6 +11,8 @@ import (
 
 var ErrNil = errors.New("查询结果为空")
 
+var NoDelete int8 = 0 // 未删除
+
 // Time is alias type for time.Time
 type Time time.Time
 
@@ -43,7 +45,7 @@ func (t Time) String() string {
 	return time.Time(t).Format(timeFormat)
 }
 
-func (t Time)Int()int64 {
+func (t Time) Int() int64 {
 	return time.Time(t).Unix()
 }
 

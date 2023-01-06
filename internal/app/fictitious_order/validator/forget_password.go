@@ -12,7 +12,7 @@ import (
  * @Time    : 2022-09-14$
  */
 type ForgetPasswordReq struct {
-	Phone string `form:"phone" binding:"required"`
+	Phone string `form:"phone" binding:"required" label:"手机号"`
 }
 
 func CheckForgetPasswordParam(c *gin.Context) {

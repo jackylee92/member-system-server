@@ -7,13 +7,17 @@ const (
 	AppLockCode = -1000
 	NoLoginCode = -2000
 	NoApi       = -4040
+	NoUserId    = -3000
+	UserInfoErr = -3001
 )
 
 const (
-	testMsg    = "测试返回"
-	appLockMsg = "系统已关闭"
-	noLoginMsg = "您还未登录"
-	noApi      = "地址错误"
+	testMsg     = "测试返回"
+	appLockMsg  = "系统已关闭"
+	noLoginMsg  = "您还未登录"
+	noApi       = "地址错误"
+	noUserId    = "用户ID不存在"
+	userInfoErr = "用户信息异常"
 )
 
 var data = map[int64]string{
@@ -21,6 +25,7 @@ var data = map[int64]string{
 	AppLockCode: appLockMsg,
 	NoLoginCode: noLoginMsg,
 	NoApi:       noApi,
+	NoUserId:    noUserId,
 }
 
 /*

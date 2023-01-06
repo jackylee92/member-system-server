@@ -4,11 +4,10 @@ go 1.17
 
 require (
 	github.com/gin-gonic/gin v1.8.1
-	github.com/jackylee92/rgo v1.0.11
+	github.com/jackylee92/rgo v1.0.13
 )
 
 require (
-	github.com/gin-contrib/sessions v0.0.5
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.530
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.530
@@ -25,9 +24,6 @@ require (
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
-	github.com/gorilla/context v1.1.1 // indirect
-	github.com/gorilla/securecookie v1.1.1 // indirect
-	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
