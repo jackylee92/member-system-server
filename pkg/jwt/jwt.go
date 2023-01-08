@@ -27,8 +27,9 @@ type LoginData struct {
 	jwt.StandardClaims
 }
 
-//生成 jwt token
+// 生成 jwt token
 func GetToken(this *rgrequest.Client, claims LoginData) (string, error) {
+	this.Log.Debug("GetToken", claims)
 	claims.StandardClaims.ExpiresAt = time.Now().Add(time.Duration(rgconfig.GetInt(jwtExpireDurationConfig)) * time.Second).Unix() // 过期时间
 	claims.StandardClaims.Issuer = rgconfig.GetStr("sys_app_name")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -59,10 +60,14 @@ func secret() jwt.Keyfunc { //按照这样的规则解析
 	}
 }
 
-//解析token
+// 解析token
 func ParseToken(this *rgrequest.Client, token string) (loginData *LoginData, err error) {
 	loginData = &LoginData{}
-	tokenTmp, _ := jwt.Parse(token, secret())
+	tokenTmp, err := jwt.Parse(token, secret())
+	if err != nil {
+		this.Log.Error("jwt.Parse", err, token)
+		return loginData, err
+	}
 	claim, ok := tokenTmp.Claims.(jwt.MapClaims)
 	if !ok {
 		err = errors.New("解析错误")

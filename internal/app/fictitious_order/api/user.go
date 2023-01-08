@@ -10,9 +10,7 @@ import (
 )
 
 type LoginRsp struct {
-	Username string `json:"username"`
-	UserId   int    `json:"user_id"`
-	Token    string `json:"token"`
+	Token string `json:"token"`
 }
 
 type UserInfoRsp struct {
@@ -52,8 +50,6 @@ func LoginHandle(c *gin.Context) {
 }
 
 func getLoginRsp(userInfo user.Info, token string) (rsq LoginRsp) {
-	rsq.Username = userInfo.Username
-	rsq.UserId = userInfo.UserId
 	rsq.Token = token
 	return rsq
 }

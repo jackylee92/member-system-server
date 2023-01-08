@@ -4,6 +4,7 @@ import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
 	"member-system-server/pkg/mysql"
+	"strconv"
 )
 
 // UserRole 用户角色关系
@@ -69,7 +70,7 @@ func (m *UserRole) Find(param mysql.SearchParam) (exists bool, err error) {
 	if err != nil {
 		return exists, err
 	}
-	param.Query += " AND delete_flag = 0"
+	param.Query += " AND delete_flag = " + strconv.Itoa(int(mysql.NoDelete))
 	mm := model.Db.Table(m.TableName()).Where(param.Query, param.Args...)
 	if param.Fields != nil && len(param.Fields) != 0 {
 		mm = mm.Select(param.Fields)
@@ -79,4 +80,24 @@ func (m *UserRole) Find(param mysql.SearchParam) (exists bool, err error) {
 		return false, err
 	}
 	return true, mm.Error
+}
+
+func (m *UserRole) Select(param mysql.SearchParam) (list []UserRole, err error) {
+	model, err := param.This.Mysql.New("")
+	if err != nil {
+		return list, err
+	}
+	param.Query += " AND delete_flag = " + strconv.Itoa(int(mysql.NoDelete))
+	mm := model.Db.Table(m.TableName()).Where(param.Query, param.Args...)
+	if param.Order != "" {
+		mm.Order(param.Order)
+	}
+	if param.Limit != 0 {
+		mm.Limit(param.Limit).Offset(param.Offset)
+	}
+	if len(param.Fields) != 0 {
+		mm.Select(param.Fields)
+	}
+	mm.Find(&list)
+	return list, err
 }

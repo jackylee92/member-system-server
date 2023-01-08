@@ -16,6 +16,7 @@ import (
 	"member-system-server/pkg/mysql"
 	"member-system-server/pkg/mysql/member_system"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -37,7 +38,7 @@ type Info struct {
 }
 
 func CheckLogin(this *rgrequest.Client) (res bool, info Info, token string) {
-	token = this.Ctx.Query("token")
+	token = this.Ctx.GetHeader("token")
 	if token == "" {
 		return false, info, token
 	}
@@ -176,6 +177,12 @@ func (m *Info) Register(this *rgrequest.Client) (userId int, err error) {
 		Status:     m.Status,
 		DeleteFlag: 0,
 	}
+	if m.Introduction == "" {
+		userInfoModel.Introduction = member_system.UserInfoDefaultIntroduction
+	}
+	if m.Avatar == "" {
+		userInfoModel.Avatar = member_system.UserInfoDefaultAvatar
+	}
 	err = userInfoModel.Create(this)
 	if err != nil {
 		this.Log.Error("userInfoModel.Create", err)
@@ -244,7 +251,7 @@ func GetInfoById(this *rgrequest.Client, userId int) (userInfo Info, err error) 
 		This:   this,
 		Query:  "id = ?",
 		Args:   []interface{}{userId},
-		Fields: []string{"id", "username"},
+		Fields: []string{"id", "username", "introduction", "avatar"},
 	})
 	if err != nil {
 		return userInfo, err
@@ -254,5 +261,51 @@ func GetInfoById(this *rgrequest.Client, userId int) (userInfo Info, err error) 
 	}
 	userInfo.UserId = userId
 	userInfo.Username = userInfoModel.Username
+	userInfo.Introduction = userInfoModel.Introduction
+	userInfo.Avatar = userInfoModel.Avatar
+	rolesId, roles, err := userInfo.getUserRoles(this)
+	if err != nil {
+		return userInfo, err
+	}
+	userInfo.Roles = roles
+	userInfo.RolesId = rolesId
 	return userInfo, err
+}
+
+// getUserRoles 获取权限
+func (u *Info) getUserRoles(this *rgrequest.Client) (rolesId []int, roles []string, err error) {
+	userRoleModel := member_system.UserRole{}
+	userRoleList, err := userRoleModel.Select(mysql.SearchParam{
+		This:   this,
+		Query:  "user_id = ? AND status = ?",
+		Args:   []interface{}{u.UserId, 1},
+		Fields: []string{"role_id"},
+	})
+	if err != nil {
+		return rolesId, roles, err
+	}
+	rolesId = make([]int, 0, len(userRoleList))
+	roles = make([]string, 0, len(userRoleList))
+	if len(userRoleList) == 0 {
+		return rolesId, roles, err
+	}
+	rolesIdStr := make([]string, 0, len(userRoleList))
+	for _, item := range userRoleList {
+		rolesId = append(rolesId, item.RoleID)
+		rolesIdStr = append(rolesIdStr, strconv.Itoa(item.RoleID))
+	}
+	roleModel := member_system.Role{}
+	roleList, err := roleModel.Select(mysql.SearchParam{
+		This:   this,
+		Query:  "id IN (" + strings.Join(rolesIdStr, ",") + ") AND status = ?",
+		Args:   []interface{}{1},
+		Fields: []string{"code"},
+	})
+	if err != nil {
+		return rolesId, roles, err
+	}
+	for _, item := range roleList {
+		roles = append(roles, item.Code)
+	}
+	return rolesId, roles, err
 }

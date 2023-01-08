@@ -9,13 +9,15 @@ import (
 
 // UserInfo 用户信息
 type UserInfo struct {
-	ID         int        `gorm:"primaryKey;column:id;type:int(10);not null"`
-	Username   string     `gorm:"column:username;type:varchar(200);not null"`      // 用户姓名
-	CreateTime mysql.Time `gorm:"column:create_time;type:datetime;default:null"`   // 录入时间
-	UpdateTime mysql.Time `gorm:"column:update_time;type:datetime;default:null"`   // 更新时间
-	DeleteFlag int8       `gorm:"column:delete_flag;type:tinyint(2);default:null"` // 虚拟删除
-	Status     int8       `gorm:"column:status;type:tinyint(2);default:null"`
-	Remark     string     `gorm:"column:remark;type:varchar(255);default:null"` // 备注
+	ID           int        `gorm:"primaryKey;column:id;type:int(10);not null"`
+	Username     string     `gorm:"column:username;type:varchar(200);not null"`   // 用户姓名
+	CreateTime   mysql.Time `gorm:"column:create_time;type:datetime"`             // 录入时间
+	UpdateTime   mysql.Time `gorm:"column:update_time;type:datetime"`             // 更新时间
+	DeleteFlag   int8       `gorm:"column:delete_flag;type:tinyint(2);default:0"` // 虚拟删除
+	Status       int8       `gorm:"column:status;type:tinyint(2);default:0"`
+	Remark       string     `gorm:"column:remark;type:varchar(255);default:''"`          // 备注
+	Introduction string     `gorm:"column:introduction;type:text;not null"`              // 介绍
+	Avatar       string     `gorm:"column:avatar;type:varchar(255);not null;default:''"` // 头像
 }
 
 // TableName get sql table name.获取数据库表名
@@ -28,6 +30,9 @@ var userInfoStatusValue = map[int8]string{
 	1: "启用",
 	2: "禁用",
 }
+
+var UserInfoDefaultIntroduction = "这家伙很拽，啥都没说！"
+var UserInfoDefaultAvatar = "http://"
 
 // TODO <LiJunDong : 2023-01-06 19:27:18> --- 好像无效
 func (m *UserInfo) BeforeCreate(tx *gorm.DB) (err error) {
