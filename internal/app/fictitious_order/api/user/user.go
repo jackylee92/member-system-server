@@ -344,3 +344,28 @@ func (u *Info) NewPassword(this *rgrequest.Client) (err error) {
 	}
 	return err
 }
+
+func (u *Info) FindInfoByAccount(this *rgrequest.Client) (err error) {
+	if len(u.Account) == 0 {
+		return errors.New("账号不能为空")
+	}
+	userAccountModel := member_system.UserAccount{}
+	exists, err := userAccountModel.Find(mysql.SearchParam{
+		This:   this,
+		Query:  "account = ?",
+		Args:   []interface{}{u.Account},
+		Fields: []string{"user_id", "status"},
+	})
+	if err != nil {
+		this.Log.Error("userAccountModel.Find", err)
+		return errors.New("获取账户失败")
+	}
+	if !exists {
+		return errors.New("账号不存在")
+	}
+	if userAccountModel.Status != member_system.UserAccountEffectiveStatus {
+		return errors.New("账号不可用")
+	}
+	u.UserId = userAccountModel.UserID
+	return err
+}

@@ -235,11 +235,20 @@ func getUserListRsp(list []user.Info, total int) (rsp UserListRsp) {
 func ForgetGetCodeHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	req := this.Param.(validator.ForgetGetCodeReq)
+	userInfo := user.Info{
+		Account: req.To,
+	}
+	err := userInfo.FindInfoByAccount(this)
+	if err != nil {
+		common.ReturnErrorAndLog(this, -4000, err.Error(), err)
+		return
+	}
 	client := valid_code.ValidCodeClient{
-		This:  this,
-		To:    req.To,
-		Typ:   common.SendTypeEmail,
-		Scene: member_system.ValidCodeMsgTypeForget,
+		This:   this,
+		To:     req.To,
+		Typ:    common.SendTypeEmail,
+		Scene:  member_system.ValidCodeMsgTypeForget,
+		UserId: userInfo.UserId,
 	}
 	if rgconfig.GetInt(common.RegisterGetCodeType) == common.SendTypePhone {
 		client.Typ = common.SendTypePhone
@@ -248,6 +257,7 @@ func ForgetGetCodeHandle(ctx *gin.Context) {
 		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
 		return
 	}
+	// TODO <LiJunDong : 2023/1/10 0:08> --- 需要返回一个token
 	this.Response.ReturnSuccess(nil)
 	return
 }

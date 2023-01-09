@@ -6,12 +6,8 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
+	"member-system-server/internal/app/fictitious_order/common"
 	"time"
-)
-
-const (
-	jwtExpireDurationConfig = "jwt_expire_duration"
-	jwtSaltConfig           = "jwt_salt"
 )
 
 /*
@@ -30,33 +26,19 @@ type LoginData struct {
 // 生成 jwt token
 func GetToken(this *rgrequest.Client, claims LoginData) (string, error) {
 	this.Log.Debug("GetToken", claims)
-	claims.StandardClaims.ExpiresAt = time.Now().Add(time.Duration(rgconfig.GetInt(jwtExpireDurationConfig)) * time.Second).Unix() // 过期时间
+	claims.StandardClaims.ExpiresAt = time.Now().Add(time.Duration(common.UserTokenJWTExpireDuration) * time.Second).Unix() // 过期时间
 	claims.StandardClaims.Issuer = rgconfig.GetStr("sys_app_name")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString([]byte(rgconfig.GetStr(jwtSaltConfig)))
+	signedToken, err := token.SignedString([]byte(common.UserTokenJWTSalt))
 	if err != nil {
 		return "", fmt.Errorf("生成token失败:%v", err)
 	}
 	return signedToken, nil
 }
 
-//验证jwt token
-//func ParseToken(this *rgrequest.Client, tokenStr string) (loginData *LoginData, err error) {
-//	token, err := jwt.ParseWithClaims(tokenStr, &LoginData{}, func(token *jwt.Token) (i interface{}, err error) { // 解析token
-//		return rgconfig.GetStr(jwtSaltConfig), nil
-//	})
-//	if err != nil {
-//		return nil, err
-//	}
-//	if claims, ok := token.Claims.(*LoginData); ok && token.Valid { // 校验token
-//		return claims, nil
-//	}
-//	return nil, errors.New("invalid token")
-//}
-
 func secret() jwt.Keyfunc { //按照这样的规则解析
 	return func(t *jwt.Token) (interface{}, error) {
-		return []byte(rgconfig.GetStr(jwtSaltConfig)), nil
+		return []byte(common.UserTokenJWTSalt), nil
 	}
 }
 

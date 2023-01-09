@@ -13,12 +13,13 @@ import (
  * @Time    : 2022-09-14$
  */
 type ForgetNewPasswordReq struct {
-	To           string `form:"to" binding:"required" label:"手机号/邮箱"`
+	To           string `json:"to" binding:"required" label:"手机号/邮箱"`
 	UserId       int
-	NewPassword  string `form:"new_password" binding:"required" label:"新密码"`
-	SurePassword string `form:"sure_password" binding:"required" label:"确认密码"`
+	NewPassword  string `json:"new_password" binding:"required" label:"新密码"`
+	SurePassword string `json:"sure_password" binding:"required" label:"确认密码"`
 }
 
+// TODO <LiJunDong : 2023/1/10 0:08> --- 需要验证 找回密码-发送验证码成功返回的token
 func CheckForgetNewPasswordParam(c *gin.Context) {
 	this := rgrequest.Get(c)
 	var param ForgetNewPasswordReq

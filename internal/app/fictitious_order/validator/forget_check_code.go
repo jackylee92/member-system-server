@@ -13,12 +13,13 @@ import (
  * @Time    : 2022-09-14$
  */
 type ForgetCheckCodeReq struct {
-	To          string `form:"to" binding:"required" label:"手机号/邮箱"`
-	ValidCode   string `form:"code" binding:"required" label:"验证码"`
+	To          string `json:"to" binding:"required" label:"手机号/邮箱"`
+	ValidCode   string `json:"code" binding:"required" label:"验证码"`
 	ValidCodeID int
 	SendType    int8
 }
 
+// TODO <LiJunDong : 2023/1/10 0:07> --- 需要验证找回密码-获取验证码成功后返回的token
 func CheckForgetCheckCodeParam(c *gin.Context) {
 	this := rgrequest.Get(c)
 	var param ForgetCheckCodeReq
@@ -36,7 +37,7 @@ func CheckForgetCheckCodeParam(c *gin.Context) {
 	}
 	param.SendType = sendType
 
-	validCodeId, err := param.validateRegisterCode(this)
+	validCodeId, err := param.validateForgetCheckCode(this)
 	if err != nil {
 		common.ReturnErrorAndLog(this, -500, err.Error(), err)
 		return
@@ -46,7 +47,7 @@ func CheckForgetCheckCodeParam(c *gin.Context) {
 	c.Next()
 }
 
-// validateRegisterCode <LiJunDong : 2023-01-06 16:35:15> --- 验证码
-func (m *ForgetCheckCodeReq) validateRegisterCode(this *rgrequest.Client) (validCodeId int, err error) {
+// validateForgetCheckCode <LiJunDong : 2023-01-06 16:35:15> --- 验证码
+func (m *ForgetCheckCodeReq) validateForgetCheckCode(this *rgrequest.Client) (validCodeId int, err error) {
 	return checkValidCode(this, m.SendType, m.To, m.ValidCode)
 }

@@ -17,6 +17,7 @@ type ValidCode struct {
 	UserID     int        `gorm:"column:user_id;type:int(10);default:null;default:0"`     // 用户ID
 	Email      string     `gorm:"column:email;type:varchar(30);default:null"`             // 邮箱
 	Phone      string     `gorm:"column:phone;type:varchar(20);default:null"`             // 手机号
+	DeviceInfo string     `gorm:"column:device_info;type:varchar(200);default:null"`      // 设备信息 记录这个code指定某个设备可用
 	MsgType    int8       `gorm:"column:msg_type;type:tinyint(2);default:null;default:0"` // 消息类型 0：未知 1：注册code
 	Msg        string     `gorm:"column:msg;type:varchar(255);default:null"`              // 消息内容
 	UpdateTime mysql.Time `gorm:"column:update_time;type:datetime;default:null"`          // 更新时间

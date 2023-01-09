@@ -7,13 +7,15 @@ package common
  */
 
 const (
-	UserPasswordSaltKey = "password_salt"
+	UserPasswordSalt           = "ljd"                        // 用戶密码生产 盐
+	UserTokenJWTSalt           = "ljd@jacky@0230@balabala*&!" // JWT token生成 盐
+	UserTokenJWTExpireDuration = 600                          // JWT token过期时间 秒
 )
 
 const (
-	RegisterCodeMin    = 1000
-	RegisterCodeMax    = 9999
-	RegisterCodeExpire = 60
+	RegisterCodeMin    = 1000 // 注册验证码范围
+	RegisterCodeMax    = 9999 // 注册验证码范围
+	RegisterCodeExpire = 600  // 注册验证码国企时间
 )
 
 const (

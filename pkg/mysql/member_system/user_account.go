@@ -2,7 +2,6 @@ package member_system
 
 import (
 	"errors"
-	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
 	"member-system-server/internal/app/fictitious_order/common"
@@ -27,10 +26,15 @@ func (m *UserAccount) TableName() string {
 	return "user_account"
 }
 
+const (
+	UserAccountEffectiveStatus   int8 = 1 // 有效状态
+	UserAccountUnEffectiveStatus int8 = 2 // 无效状态
+)
+
 var userAccountStatusValue = map[int8]string{
-	0: "未知",
-	1: "启用",
-	2: "禁用",
+	0:                            "未知",
+	UserAccountEffectiveStatus:   "启用",
+	UserAccountUnEffectiveStatus: "禁用",
 }
 
 func (m *UserAccount) BeforeCreate(tx *gorm.DB) (err error) {
@@ -92,7 +96,7 @@ func (m *UserAccount) GetInfoByAccount(this *rgrequest.Client) (err error) {
 
 // TODO <LiJunDong : 2022-11-04 18:35:54> --- 加密
 func getPassword(password string) (newPassword string) {
-	return password + rgconfig.GetStr(common.UserPasswordSaltKey)
+	return password + common.UserPasswordSalt
 }
 
 func StatusVal(status int8) string {
@@ -125,6 +129,7 @@ func (m *UserAccount) UpdatePassword(param mysql.SearchParam, data map[string]in
 	if len(password.(string)) == 0 {
 		return errors.New("密码不能为空")
 	}
+	data["password"] = getPassword(password.(string))
 	data["update_time"] = time.Now()
 	model, err := param.This.Mysql.New("")
 	if err != nil {

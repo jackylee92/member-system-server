@@ -25,8 +25,10 @@ type ValidCodeClient struct {
 	Typ        int8
 	To         string
 	ExpireTime int64
-	Template   int  // 模版ID
-	Scene      int8 // 场景
+	Template   int    // 模版ID
+	Scene      int8   // 场景
+	DeviceInfo string // 设备信息，记录这个code指定某个设备可用
+	UserId     int    // 用户id
 }
 
 func (m *ValidCodeClient) GetCode() (err error) {
@@ -95,6 +97,8 @@ func (m *ValidCodeClient) save() (err error) {
 		MsgType:    m.Scene,
 		Msg:        m.Msg,
 		ExpireTime: mysql.Time(expireTime),
+		DeviceInfo: m.DeviceInfo,
+		UserID:     m.UserId,
 	}
 	return model.Create(m.This)
 }
