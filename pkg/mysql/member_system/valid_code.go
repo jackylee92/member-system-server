@@ -34,6 +34,7 @@ var UsableValidCodeStatus int8 = 1 // 可用状态
 var UsedValidCodeStatus int8 = 2   // 已用状态
 
 var ValidCodeMsgTypeRegister int8 = 1 // 注册类型
+var ValidCodeMsgTypeForget int8 = 2   // 忘记密码类型
 var ValidCodeDefaultStatus int8 = 1   // 默认状态
 
 func (m *ValidCode) BeforeCreate(tx *gorm.DB) (err error) {

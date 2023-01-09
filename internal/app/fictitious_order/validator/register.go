@@ -15,7 +15,7 @@ import (
  * @Time    : 2022-09-14$
  */
 type RegisterReq struct {
-	Phone          string `form:"phone" binding:"required" label:"手机号"`
+	To             string `form:"to" binding:"required" label:"手机号/邮箱"`
 	ValidCode      string `form:"valid_code" label:"验证码"`
 	ValidCodeID    int
 	InvitationCode string `form:"invitation_code" binding:"required" label:"邀请码"`
@@ -32,11 +32,11 @@ func CheckRegisterParam(c *gin.Context) {
 		common.ReturnErrorAndLog(this, -500, errMsg, errors.New(errMsg))
 		return
 	}
-	if !param.checkSurePassword() {
+	if !param.checkRegisterSurePassword() {
 		common.ReturnErrorAndLog(this, -500, "确认密码不匹配", err)
 		return
 	}
-	validCodeId, err := validateRegisterCode(this, param)
+	validCodeId, err := param.validateRegisterCode(this)
 	if err != nil {
 		common.ReturnErrorAndLog(this, -500, err.Error(), err)
 		return
@@ -46,7 +46,7 @@ func CheckRegisterParam(c *gin.Context) {
 	c.Next()
 }
 
-func (m RegisterReq) checkSurePassword() (res bool) {
+func (m RegisterReq) checkRegisterSurePassword() (res bool) {
 	if m.Password != m.SurePassword {
 		return false
 	}
@@ -54,16 +54,16 @@ func (m RegisterReq) checkSurePassword() (res bool) {
 }
 
 // validateRegisterCode <LiJunDong : 2023-01-06 16:35:15> --- 验证码
-func validateRegisterCode(this *rgrequest.Client, param RegisterReq) (validCodeId int, err error) {
+func (m *RegisterReq) validateRegisterCode(this *rgrequest.Client) (validCodeId int, err error) {
 	if !rgconfig.GetBool(common.RegisterCodeOnOffConfig) {
 		return validCodeId, err
 	}
-	return CheckValidCode(this, common.SendTypePhone, param.Phone, param.ValidCode)
+	return checkValidCode(this, int8(rgconfig.GetInt(common.RegisterGetCodeType)), m.To, m.ValidCode)
 }
 
 // TODO <LiJunDong : 2022-11-06 17:30:02> --- 邀请码验证
 
-func ValidateInvitationCode(c *gin.Context) {
+func ValidateRegisterInvitationCode(c *gin.Context) {
 	if !rgconfig.GetBool(common.InvitationCodeOnOffConfig) {
 		c.Next()
 		return

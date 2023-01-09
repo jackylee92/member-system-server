@@ -21,9 +21,12 @@ func GetRouter() *gin.Engine {
 	{
 		publicGroup.POST("/login", validator.CheckLoginParam, api.LoginHandle)
 		publicGroup.POST("/register", validator.CheckRegisterParam, api.RegisterHandle)
-		publicGroup.GET("/get_code", validator.CheckGetCodeParam, validator.HighFrequencyGetCodeLock, api.GetCodeHandle)
+		publicGroup.GET("/register_get_code",
+			validator.CheckRegisterGetCodeParam, validator.HighFrequencyRegisterGetCodeLock, api.RegisterGetCodeHandle)
 		// 输入手机号 接受验证码 输入新的密码
-		publicGroup.GET("/forget_password", validator.CheckForgetPasswordParam, api.ForgetPasswordHandle)
+		publicGroup.GET("/forget_get_code", validator.CheckForgetGetCodeParam, api.ForgetGetCodeHandle)
+		publicGroup.GET("/forget_check_code", validator.CheckForgetCheckCodeParam, api.ForgetCheckCodeHandle)
+		publicGroup.GET("/forget_new_password", validator.CheckForgetNewPasswordParam, api.ForgetNewPasswordHandle)
 	}
 	homeGroup := router.Group("/home").Use(app_lock.AppLockCheck, authentication.CheckLogin)
 	{

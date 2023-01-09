@@ -11,13 +11,14 @@ import (
  * @Author  : LiJunDong
  * @Time    : 2022-09-14$
  */
-type ForgetPasswordReq struct {
-	Phone string `form:"phone" binding:"required" label:"手机号"`
+type ForgetGetCodeReq struct {
+	To       string `form:"to" binding:"required" label:"手机号/邮箱"`
+	SendType int8
 }
 
-func CheckForgetPasswordParam(c *gin.Context) {
+func CheckForgetGetCodeParam(c *gin.Context) {
 	this := rgrequest.Get(c)
-	var param ForgetPasswordReq
+	var param ForgetGetCodeReq
 	err := c.ShouldBind(&param)
 	if err != nil {
 		errMsg, _ := rgrouter.Error(err)
@@ -25,6 +26,12 @@ func CheckForgetPasswordParam(c *gin.Context) {
 		return
 	}
 
+	sendType, err := getCodeAcceptType(param.To)
+	if err != nil {
+		this.Response.ReturnError(-500, nil, err.Error())
+		return
+	}
+	param.SendType = sendType
 	this.Param = param
 	c.Next()
 }

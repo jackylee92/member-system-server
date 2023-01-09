@@ -17,7 +17,7 @@ import (
  */
 
 // CheckValidCode <LiJunDong : 2023-01-06 13:56:53> --- 验证验证码
-func CheckValidCode(this *rgrequest.Client, typ int8, to, code string) (id int, err error) {
+func checkValidCode(this *rgrequest.Client, typ int8, to, code string) (id int, err error) {
 	model := member_system.ValidCode{Phone: to}
 	if typ == common.SendTypeEmail {
 		model.Email = to
@@ -51,7 +51,7 @@ func CheckValidCode(this *rgrequest.Client, typ int8, to, code string) (id int, 
 	return model.ID, err
 }
 
-func CheckPhone(phone string) (err error) {
+func checkPhone(phone string) (err error) {
 	result, _ := regexp.MatchString(`^(1[3|4|5|8][0-9]\d{4,8})$`, phone)
 	if !result {
 		return errors.New("手机号错误")
@@ -59,9 +59,25 @@ func CheckPhone(phone string) (err error) {
 	return err
 }
 
-func CheckEmail(email string) (err error) {
+func checkEmail(email string) (err error) {
 	if _, err = mail.ParseAddress(email); err != nil {
 		return errors.New("邮箱错误")
 	}
 	return err
+}
+
+func getCodeAcceptType(param string) (sendType int8, err error) {
+	if len(param) < 5 {
+		return sendType, errors.New("手机号/邮箱错误")
+	}
+	if err = checkPhone(param); err == nil {
+		sendType = common.SendTypePhone
+	}
+	if err = checkEmail(param); err == nil {
+		sendType = common.SendTypeEmail
+	}
+	if sendType == 0 {
+		return sendType, errors.New("手机号/邮箱错误")
+	}
+	return sendType, nil
 }

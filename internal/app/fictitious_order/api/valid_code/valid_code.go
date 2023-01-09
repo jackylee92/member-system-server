@@ -25,6 +25,8 @@ type ValidCodeClient struct {
 	Typ        int8
 	To         string
 	ExpireTime int64
+	Template   int  // 模版ID
+	Scene      int8 // 场景
 }
 
 func (m *ValidCodeClient) GetCode() (err error) {
@@ -51,7 +53,9 @@ func (m *ValidCodeClient) setCode() (err error) {
 }
 
 func (m *ValidCodeClient) send() (err error) {
-	m.Msg = "你的验证码是" + m.Code + "，请勿泄露。"
+	if err = m.setContent(); err != nil {
+		return err
+	}
 	m.ExpireTime = rgtime.NowTimeInt() + common.RegisterCodeExpire
 	// TODO <LiJunDong : 2023-01-06 18:54:23> --- 开发
 	if m.Typ == common.SendTypePhone {
@@ -70,6 +74,11 @@ func (m *ValidCodeClient) send() (err error) {
 	return err
 }
 
+func (m *ValidCodeClient) setContent() (err error) {
+	m.Msg = "你的验证码是" + m.Code + "，请勿泄露。"
+	return err
+}
+
 func (m *ValidCodeClient) save() (err error) {
 	expireTime := time.Unix(m.ExpireTime, 64)
 	var phone, email string
@@ -83,7 +92,7 @@ func (m *ValidCodeClient) save() (err error) {
 		Phone:      phone,
 		Email:      email,
 		Status:     member_system.ValidCodeDefaultStatus,
-		MsgType:    member_system.ValidCodeMsgTypeRegister,
+		MsgType:    m.Scene,
 		Msg:        m.Msg,
 		ExpireTime: mysql.Time(expireTime),
 	}

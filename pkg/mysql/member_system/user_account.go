@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/pkg/mysql"
+	"time"
 )
 
 // UserAccount [...]
@@ -114,4 +115,20 @@ func (m *UserAccount) ExistAccount(this *rgrequest.Client) (exist bool, err erro
 		Fields: []string{"id"},
 	}
 	return model.Find(searchParam)
+}
+
+func (m *UserAccount) UpdatePassword(param mysql.SearchParam, data map[string]interface{}) (err error) {
+	password, ok := data["password"]
+	if !ok {
+		return errors.New("密码不能为空")
+	}
+	if len(password.(string)) == 0 {
+		return errors.New("密码不能为空")
+	}
+	data["update_time"] = time.Now()
+	model, err := param.This.Mysql.New("")
+	if err != nil {
+		return err
+	}
+	return model.Db.Table(m.TableName()).Where(param.Query, param.Args...).Updates(data).Error
 }

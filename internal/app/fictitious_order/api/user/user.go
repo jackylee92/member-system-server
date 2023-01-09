@@ -317,3 +317,30 @@ func (u *Info) getUserRoles(this *rgrequest.Client) (rolesId []int, roles []stri
 func (c *ListClient) GetList() (list []Info, total int, err error) {
 	return list, total, err
 }
+
+func (u *Info) ForgetCheckCode(this *rgrequest.Client) (err error) {
+	if err := member_system.UseValidCodeById(this, u.ValidCodeId); err != nil {
+		this.Log.Error("member_system.UseValidCodeById", err)
+		return errors.New("验证码验证失败")
+	}
+	return err
+}
+
+func (u *Info) NewPassword(this *rgrequest.Client) (err error) {
+	if u.UserId == 0 {
+		return errors.New("用户ID为空")
+	}
+	if len(u.Password) == 0 {
+		return errors.New("用户密码为空")
+	}
+	accountModel := member_system.UserAccount{}
+	err = accountModel.UpdatePassword(mysql.SearchParam{
+		This:  this,
+		Query: "user_id = ?",
+		Args:  []interface{}{u.Password},
+	}, map[string]interface{}{"password": u.Password})
+	if err != nil {
+		this.Log.Error("accountModel.UpdatePassword", this, err)
+	}
+	return err
+}

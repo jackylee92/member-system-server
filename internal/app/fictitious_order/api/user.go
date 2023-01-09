@@ -2,11 +2,14 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"member-system-server/internal/app/fictitious_order/api/user"
+	"member-system-server/internal/app/fictitious_order/api/valid_code"
 	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/internal/app/fictitious_order/message"
 	"member-system-server/internal/app/fictitious_order/validator"
+	"member-system-server/pkg/mysql/member_system"
 )
 
 type LoginRsp struct {
@@ -77,6 +80,26 @@ func getLoginRsp(userInfo user.Info, token string) (rsq LoginRsp) {
 	return rsq
 }
 
+func RegisterGetCodeHandle(ctx *gin.Context) {
+	this := rgrequest.Get(ctx)
+	req := this.Param.(validator.RegisterGetCodeReq)
+	client := valid_code.ValidCodeClient{
+		This:  this,
+		To:    req.To,
+		Typ:   common.SendTypeEmail,
+		Scene: member_system.ValidCodeMsgTypeRegister,
+	}
+	if rgconfig.GetInt(common.RegisterGetCodeType) == common.SendTypePhone {
+		client.Typ = common.SendTypePhone
+	}
+	if err := client.GetCode(); err != nil {
+		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
+		return
+	}
+	this.Response.ReturnSuccess(nil)
+	return
+}
+
 func LogOutHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	userInfo := user.Info{}
@@ -96,8 +119,8 @@ func RegisterHandle(ctx *gin.Context) {
 	}
 	req := this.Param.(validator.RegisterReq)
 	userInfo := user.Info{
-		Account:     req.Phone,
-		Username:    user.DefaultUsername(req.Phone),
+		Account:     req.To,
+		Username:    user.DefaultUsername(req.To),
 		Password:    req.Password,
 		RolesId:     defaultUserRolesIds,
 		ValidCodeId: req.ValidCodeID,
@@ -110,10 +133,6 @@ func RegisterHandle(ctx *gin.Context) {
 	userInfo.UserId = userId
 	go userInfo.SaveRegisterLog(this, req)
 	this.Response.ReturnSuccess(nil)
-	return
-}
-
-func ForgetPasswordHandle(ctx *gin.Context) {
 	return
 }
 
@@ -211,4 +230,54 @@ func getUserListRsp(list []user.Info, total int) (rsp UserListRsp) {
 		},
 	}
 	return rsp
+}
+
+func ForgetGetCodeHandle(ctx *gin.Context) {
+	this := rgrequest.Get(ctx)
+	req := this.Param.(validator.ForgetGetCodeReq)
+	client := valid_code.ValidCodeClient{
+		This:  this,
+		To:    req.To,
+		Typ:   common.SendTypeEmail,
+		Scene: member_system.ValidCodeMsgTypeForget,
+	}
+	if rgconfig.GetInt(common.RegisterGetCodeType) == common.SendTypePhone {
+		client.Typ = common.SendTypePhone
+	}
+	if err := client.GetCode(); err != nil {
+		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
+		return
+	}
+	this.Response.ReturnSuccess(nil)
+	return
+}
+
+func ForgetCheckCodeHandle(ctx *gin.Context) {
+	this := rgrequest.Get(ctx)
+	req := this.Param.(validator.ForgetCheckCodeReq)
+	userInfo := user.Info{
+		Account:     req.To,
+		ValidCodeId: req.ValidCodeID,
+	}
+	if err := userInfo.ForgetCheckCode(this); err != nil {
+		common.ReturnErrorAndLog(this, -4001, "验证失败", err)
+		return
+	}
+	this.Response.ReturnSuccess(nil)
+	return
+}
+
+func ForgetNewPasswordHandle(ctx *gin.Context) {
+	this := rgrequest.Get(ctx)
+	req := this.Param.(validator.ForgetNewPasswordReq)
+	userInfo := user.Info{
+		UserId:   req.UserId,
+		Password: req.NewPassword,
+	}
+	if err := userInfo.NewPassword(this); err != nil {
+		common.ReturnErrorAndLog(this, -4001, "修改密码失败", err)
+		return
+	}
+	this.Response.ReturnSuccess(nil)
+	return
 }

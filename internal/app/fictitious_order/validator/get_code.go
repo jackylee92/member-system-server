@@ -13,20 +13,20 @@ import (
  * @Author  : LiJunDong
  * @Time    : 2022-09-14$
  */
-type GetCodeReq struct {
+type RegisterGetCodeReq struct {
 	To string `form:"to" binding:"required" label:"接收方"`
 }
 
-func CheckGetCodeParam(c *gin.Context) {
+func CheckRegisterGetCodeParam(c *gin.Context) {
 	this := rgrequest.Get(c)
-	var param GetCodeReq
+	var param RegisterGetCodeReq
 	err := c.ShouldBind(&param)
 	if err != nil {
 		errMsg, _ := rgrouter.Error(err)
 		this.Response.ReturnError(-500, nil, errMsg)
 		return
 	}
-	if err = checkTo(param); err != nil {
+	if err = param.registerCheckTo(); err != nil {
 		this.Response.ReturnError(-500, nil, err.Error())
 		return
 	}
@@ -34,16 +34,16 @@ func CheckGetCodeParam(c *gin.Context) {
 	c.Next()
 }
 
-func checkTo(param GetCodeReq) (err error) {
+func (m *RegisterGetCodeReq) registerCheckTo() (err error) {
 	if rgconfig.GetInt(common.RegisterGetCodeType) == common.SendTypePhone {
-		return CheckPhone(param.To)
+		return checkPhone(m.To)
 	} else {
-		return CheckEmail(param.To)
+		return checkEmail(m.To)
 	}
 }
 
-// HighFrequencyGetCodeLock <LiJunDong : 2022-11-06 16:03:57> --- TODO 未实现 控制请求频率，获取验证码频率限制
-func HighFrequencyGetCodeLock(c *gin.Context) {
+// HighFrequencyRegisterGetCodeLock <LiJunDong : 2022-11-06 16:03:57> --- TODO 未实现 控制请求频率，获取验证码频率限制
+func HighFrequencyRegisterGetCodeLock(c *gin.Context) {
 	this := rgrequest.Get(c)
 	this.Log.Info("HighFrequencyRequestLock ---- Before")
 	c.Next()
