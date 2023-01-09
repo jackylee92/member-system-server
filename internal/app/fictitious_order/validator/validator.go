@@ -6,6 +6,8 @@ import (
 	"github.com/jackylee92/rgo/util/rgtime"
 	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/pkg/mysql/member_system"
+	"net/mail"
+	"regexp"
 )
 
 /*
@@ -47,4 +49,19 @@ func CheckValidCode(this *rgrequest.Client, typ int8, to, code string) (id int, 
 		return id, errors.New("验证码已过期")
 	}
 	return model.ID, err
+}
+
+func CheckPhone(phone string) (err error) {
+	result, _ := regexp.MatchString(`^(1[3|4|5|8][0-9]\d{4,8})$`, phone)
+	if !result {
+		return errors.New("手机号错误")
+	}
+	return err
+}
+
+func CheckEmail(email string) (err error) {
+	if _, err = mail.ParseAddress(email); err != nil {
+		return errors.New("邮箱错误")
+	}
+	return err
 }

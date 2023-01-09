@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/gin-gonic/gin v1.8.1
-	github.com/jackylee92/rgo v1.0.13
+	github.com/jackylee92/rgo v1.0.14
 )
 
 require (

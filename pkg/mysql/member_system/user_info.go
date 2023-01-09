@@ -3,7 +3,7 @@ package member_system
 import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
-	"log"
+	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/pkg/mysql"
 )
 
@@ -31,12 +31,11 @@ var userInfoStatusValue = map[int8]string{
 	2: "禁用",
 }
 
-var UserInfoDefaultIntroduction = "这家伙很拽，啥都没说！"
-var UserInfoDefaultAvatar = "http://"
+var UserInfoDefaultIntroduction = common.DefaultUserIntroduction
+var UserInfoDefaultAvatar = common.DefaultUserAvatarUrl
 
-// TODO <LiJunDong : 2023-01-06 19:27:18> --- 好像无效
+// <LiJunDong : 2023-01-06 19:27:18> --- 好像无效
 func (m *UserInfo) BeforeCreate(tx *gorm.DB) (err error) {
-	log.Println("BeforeCreate----")
 	m.CreateTime = mysql.NowTime()
 	m.UpdateTime = mysql.NowTime()
 	m.DeleteFlag = mysql.NoDelete

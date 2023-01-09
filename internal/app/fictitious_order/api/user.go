@@ -21,6 +21,29 @@ type UserInfoRsp struct {
 	UserId       int      `json:"user_id"`
 }
 
+type UserListRsp struct {
+	List  []UserListRspItem `json:"list"`
+	Total int               `json:"total"`
+}
+type UserListRspItem struct {
+	Id              int      `json:"id"`
+	Timestamp       int64    `json:"timestamp"`
+	Author          string   `json:"author"`
+	Reviewer        string   `json:"reviewer"`
+	Title           string   `json:"title"`
+	ContentShort    string   `json:"content_short"`
+	Content         string   `json:"content"`
+	Forecast        float64  `json:"forecast"`
+	Importance      int      `json:"importance"`
+	Type            string   `json:"type"`
+	Status          string   `json:"status"`
+	DisplayTime     string   `json:"display_time"`
+	CommentDisabled bool     `json:"comment_disabled"`
+	Pageviews       int      `json:"pageviews"`
+	ImageUri        string   `json:"image_uri"`
+	Platforms       []string `json:"platforms"`
+}
+
 func LoginHandle(c *gin.Context) {
 	this := rgrequest.Get(c)
 	req := this.Param.(validator.LoginReq)
@@ -114,5 +137,78 @@ func getUserInfoRsp(userInfo user.Info) (rsp UserInfoRsp) {
 	rsp.Roles = userInfo.Roles
 	rsp.Avatar = userInfo.Avatar
 	rsp.Introduction = userInfo.Introduction
+	return rsp
+}
+
+func GetUserListHandle(ctx *gin.Context) {
+	this := rgrequest.Get(ctx)
+	param := this.Param.(validator.GetUserListReq)
+	this.Log.Info("GetUserListHandle", param)
+	userClient := user.ListClient{}
+	list, total, err := userClient.GetList()
+	if err != nil {
+		common.ReturnErrorAndLog(this, message.UserInfoErr, "", err)
+	}
+	this.Response.ReturnSuccess(getUserListRsp(list, total))
+}
+
+func getUserListRsp(list []user.Info, total int) (rsp UserListRsp) {
+	rsp.Total = total
+	rsp.List = []UserListRspItem{
+		{
+			Id:              100,
+			Timestamp:       1347938534717,
+			Author:          "Amy",
+			Reviewer:        "Betty",
+			Title:           "Uwnbqtpib Fhplkkx Seeyoxm Bmvjuhbmw Lgq Qyydz Wrejbymlnz",
+			ContentShort:    "mock data",
+			Content:         "<p>I am testing data, I am testing data.</p><p><img src=\"https://wpimg.wallstcn.com/4c69009c-0fd4-4153-b112-6cb53d1cf943\"></p>",
+			Forecast:        74.63,
+			Importance:      2,
+			Type:            "EU",
+			Status:          "draft",
+			DisplayTime:     "1990-05-13 12:11:24",
+			CommentDisabled: true,
+			Pageviews:       868,
+			ImageUri:        "https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70b3",
+			Platforms:       []string{"a-platform"},
+		},
+		{
+			Id:              101,
+			Timestamp:       1347938534717,
+			Author:          "Amy",
+			Reviewer:        "Betty",
+			Title:           "Uwnbqtpib Fhplkkx Seeyoxm Bmvjuhbmw Lgq Qyydz Wrejbymlnz",
+			ContentShort:    "mock data",
+			Content:         "<p>I am testing data, I am testing data.</p><p><img src=\"https://wpimg.wallstcn.com/4c69009c-0fd4-4153-b112-6cb53d1cf943\"></p>",
+			Forecast:        74.63,
+			Importance:      2,
+			Type:            "EU",
+			Status:          "draft",
+			DisplayTime:     "1990-05-13 12:11:24",
+			CommentDisabled: true,
+			Pageviews:       868,
+			ImageUri:        "https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70b3",
+			Platforms:       []string{"a-platform"},
+		},
+		{
+			Id:              102,
+			Timestamp:       1347938534717,
+			Author:          "Amy",
+			Reviewer:        "Betty",
+			Title:           "Uwnbqtpib Fhplkkx Seeyoxm Bmvjuhbmw Lgq Qyydz Wrejbymlnz",
+			ContentShort:    "mock data",
+			Content:         "<p>I am testing data, I am testing data.</p><p><img src=\"https://wpimg.wallstcn.com/4c69009c-0fd4-4153-b112-6cb53d1cf943\"></p>",
+			Forecast:        74.63,
+			Importance:      2,
+			Type:            "EU",
+			Status:          "draft",
+			DisplayTime:     "1990-05-13 12:11:24",
+			CommentDisabled: true,
+			Pageviews:       868,
+			ImageUri:        "https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70b3",
+			Platforms:       []string{"a-platform"},
+		},
+	}
 	return rsp
 }

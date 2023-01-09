@@ -42,12 +42,13 @@ sys_mysql:
 sys_mysql_log: info
 
 #### 邮件
-default_email_host: "smtp.qiye.aliyun.com"
+default_email_host: "smtp.qq.com"
 default_email_port: 465
-default_email_from: "sys@bb-dd.com"
-default_email_username: "sys@bb-dd.com"
-default_email_password: "Li568915010"
+default_email_from: "568915010@qq.com"
+default_email_username: "568915010@qq.com"
+default_email_password: "fdwwcadyewnwbeig"
 # default_email_password: "8442b449a8c713742b00"
 
 register_code_on_off: true
 invitation_code_on_off: true
+register_get_code_type: 1 # 注册接受code方式 1：邮件 2：手机号

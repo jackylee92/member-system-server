@@ -5,6 +5,7 @@ import (
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/util/rgtime"
 	"member-system-server/internal/app/fictitious_order/common"
+	"member-system-server/pkg/email/email_default"
 	"member-system-server/pkg/mysql"
 	"member-system-server/pkg/mysql/member_system"
 	"member-system-server/pkg/random_code"
@@ -56,7 +57,15 @@ func (m *ValidCodeClient) send() (err error) {
 	if m.Typ == common.SendTypePhone {
 
 	} else if m.Typ == common.SendTypeEmail {
-
+		client := email_default.Client{
+			This:     m.This,
+			Content:  m.Msg,
+			ToEmails: []string{m.To},
+		}
+		err = client.SendCode()
+	}
+	if err != nil {
+		m.This.Log.Error("验证码发送失败", err, m)
 	}
 	return err
 }

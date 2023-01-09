@@ -40,6 +40,7 @@ func (c *Client) SendCode() (err error) {
 		UserName: rgconfig.GetStr(defaultEmailUsernameConfig),
 		Password: rgconfig.GetStr(defaultEmailPasswordConfig),
 	}
+	c.This.Log.Info("SendCode", emailClient)
 	err = emailClient.Send()
 	return err
 }

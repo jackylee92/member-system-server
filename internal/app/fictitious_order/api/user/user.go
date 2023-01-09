@@ -37,6 +37,10 @@ type Info struct {
 	ValidCodeId  int
 }
 
+type ListClient struct {
+	This *rgrequest.Client
+}
+
 func CheckLogin(this *rgrequest.Client) (res bool, info Info, token string) {
 	token = this.Ctx.GetHeader("token")
 	if token == "" {
@@ -308,4 +312,8 @@ func (u *Info) getUserRoles(this *rgrequest.Client) (rolesId []int, roles []stri
 		roles = append(roles, item.Code)
 	}
 	return rolesId, roles, err
+}
+
+func (c *ListClient) GetList() (list []Info, total int, err error) {
+	return list, total, err
 }

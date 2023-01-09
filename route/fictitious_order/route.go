@@ -19,10 +19,9 @@ func GetRouter() *gin.Engine {
 
 	publicGroup := router.Group("/public")
 	{
-		publicGroup.GET("/lock", api.LockHandle)
 		publicGroup.POST("/login", validator.CheckLoginParam, api.LoginHandle)
 		publicGroup.POST("/register", validator.CheckRegisterParam, api.RegisterHandle)
-		publicGroup.GET("/get_code", validator.CheckGetCodeParam, validator.HighFrequencyRequestLock, api.GetCodeHandle)
+		publicGroup.GET("/get_code", validator.CheckGetCodeParam, validator.HighFrequencyGetCodeLock, api.GetCodeHandle)
 		// 输入手机号 接受验证码 输入新的密码
 		publicGroup.GET("/forget_password", validator.CheckForgetPasswordParam, api.ForgetPasswordHandle)
 	}
@@ -34,6 +33,11 @@ func GetRouter() *gin.Engine {
 	{
 		userGroup.GET("/info", validator.CheckGetUserInfoParam, api.GetUserInfoHandle)
 		userGroup.GET("/logout", api.LogOutHandle)
+		userGroup.POST("/list", validator.CheckGetUserListParam, api.GetUserListHandle)
+	}
+	systemGroup := router.Group("/system").Use()
+	{
+		systemGroup.GET("/lock", api.LockHandle)
 	}
 	router.NoRoute(func(c *gin.Context) {
 		this := rgrequest.Get(c)

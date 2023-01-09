@@ -22,10 +22,10 @@ import (
  */
 func TestEmailCode(t *testing.T) {
 	this := rgo.This
-	content := "你好"
+	content := "你好,这个你知道吗"
 	emailClient := email_default.Client{
 		This:     this,
-		ToEmails: []string{"568915010@qq.com"},
+		ToEmails: []string{"jackylee92@139.com"},
 		Content:  content,
 	}
 	err := emailClient.SendCode()
