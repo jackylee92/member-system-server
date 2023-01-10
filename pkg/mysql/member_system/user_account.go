@@ -3,8 +3,8 @@ package member_system
 import (
 	"errors"
 	"github.com/jackylee92/rgo/core/rgrequest"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/pkg/mysql"
 	"time"
 )
@@ -71,7 +71,11 @@ func (m *UserAccount) Find(param mysql.SearchParam) (exists bool, err error) {
 }
 
 func (m *UserAccount) Create(this *rgrequest.Client) (err error) {
-	m.Password = getPassword(m.Password)
+	password, err := getPassword(m.Password)
+	if err != nil {
+		return err
+	}
+	m.Password = password
 	model, err := this.Mysql.New("")
 	if err != nil {
 		return err
@@ -81,22 +85,37 @@ func (m *UserAccount) Create(this *rgrequest.Client) (err error) {
 }
 
 func (m *UserAccount) GetInfoByAccount(this *rgrequest.Client) (err error) {
+	password, err := getPassword(m.Password)
+	if err != nil {
+		return err
+	}
 	searchParam := mysql.SearchParam{
-		Query:  "account = ? AND password = ?",
-		Args:   []interface{}{m.Account, getPassword(m.Password)},
-		Fields: []string{"id", "status", "account", "user_id"},
+		Query:  "account = ",
+		Args:   []interface{}{m.Account},
+		Fields: []string{"id", "status", "account", "user_id", "password"},
 		This:   this,
 	}
 	_, err = m.Find(searchParam)
 	if err != nil {
 		return errors.New("通过账号查询用户信息失败|" + err.Error())
 	}
+	if m.Password != password {
+		return errors.New("通过账号查询用户信息失败|密码错误")
+	}
 	return err
 }
 
 // TODO <LiJunDong : 2022-11-04 18:35:54> --- 加密
-func getPassword(password string) (newPassword string) {
-	return password + common.UserPasswordSalt
+func getPassword(password string) (newPassword string, err error) {
+	// 加密密码，使用 bcrypt 包当中的 GenerateFromPassword 方法，bcrypt.DefaultCost 代表使用默认加密成本
+	encryptPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	} else {
+		return string(encryptPassword), nil
+	}
+
+	//return password + common.UserPasswordSalt
 }
 
 func StatusVal(status int8) string {
@@ -129,7 +148,11 @@ func (m *UserAccount) UpdatePassword(param mysql.SearchParam, data map[string]in
 	if len(password.(string)) == 0 {
 		return errors.New("密码不能为空")
 	}
-	data["password"] = getPassword(password.(string))
+	newPassword, err := getPassword(password.(string))
+	if err != nil {
+		return err
+	}
+	data["password"] = newPassword
 	data["update_time"] = time.Now()
 	model, err := param.This.Mysql.New("")
 	if err != nil {

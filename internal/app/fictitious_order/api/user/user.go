@@ -257,9 +257,8 @@ func (m *Info) Register(this *rgrequest.Client) (userId int, err error) {
 	return userId, err
 }
 
-// TODO <LiJunDong : 2022-11-04 18:36:14> --- 开发
 func DefaultUsername(param string) (nickname string) {
-	param = "username-" + param
+	param = "未命名"
 	return param
 }
 
@@ -375,6 +374,21 @@ func (u *Info) NewPassword(this *rgrequest.Client) (err error) {
 		this.Log.Error("accountModel.UpdatePassword", this, err)
 	}
 	return err
+}
+
+func (u *Info) SaveNewPasswordLog(this *rgrequest.Client, req interface{}) {
+	var logData member_system.UserLog
+	logData.UserID = u.UserId
+	logData.Type = member_system.UserLogLoginType
+	logData.Action = "NewPasswordHandle"
+	logData.Remark = "找回密码成功"
+	contentByte, _ := json.Marshal(req)
+	logData.Content = string(contentByte)
+	err := logData.Add(this)
+	if err != nil {
+		this.Log.Error("找回密码记录失败|" + err.Error())
+	}
+	return
 }
 
 func (u *Info) FindInfoByAccount(this *rgrequest.Client) (err error) {

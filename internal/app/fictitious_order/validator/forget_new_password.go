@@ -21,7 +21,6 @@ type ForgetNewPasswordReq struct {
 	SurePassword string `json:"sure_password" binding:"required" label:"确认密码"`
 }
 
-// TODO <LiJunDong : 2023/1/10 0:08> --- 需要验证 找回密码-发送验证码成功返回的token
 func CheckForgetNewPasswordParam(c *gin.Context) {
 	this := rgrequest.Get(c)
 	var param ForgetNewPasswordReq

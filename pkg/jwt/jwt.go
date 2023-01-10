@@ -7,6 +7,7 @@ import (
 	"github.com/jackylee92/rgo/core/rgconfig"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"member-system-server/internal/app/fictitious_order/common"
+	"strconv"
 	"time"
 )
 
@@ -30,7 +31,16 @@ type LoginData struct {
 // 生成 jwt token
 func GetToken(this *rgrequest.Client, claims LoginData) (string, error) {
 	this.Log.Debug("GetToken", claims)
-	claims.StandardClaims.ExpiresAt = time.Now().Add(time.Duration(common.UserTokenJWTExpireDuration) * time.Second).Unix() // 过期时间
+	claimsType, _ := strconv.Atoi(claims.Typ)
+	if claimsType == 0 {
+		return "", errors.New("类型错误")
+	}
+	if claimsType == common.JWTTokenTypeLogin {
+		claims.StandardClaims.ExpiresAt = time.Now().Add(time.Duration(common.UserTokenJWTExpireDuration) * time.Second).Unix() // 过期时间
+	}
+	if claimsType == common.JWTTokenTypeForget {
+		claims.StandardClaims.ExpiresAt = time.Now().Add(time.Duration(common.JWTTokenForgetExpireDuration) * time.Second).Unix() // 过期时间
+	}
 	claims.StandardClaims.Issuer = rgconfig.GetStr("sys_app_name")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(common.UserTokenJWTSalt))

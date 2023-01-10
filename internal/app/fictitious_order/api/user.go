@@ -300,6 +300,7 @@ func ForgetNewPasswordHandle(ctx *gin.Context) {
 		common.ReturnErrorAndLog(this, -4001, "修改密码失败", err)
 		return
 	}
+	go userInfo.SaveNewPasswordLog(this, req)
 	this.Response.ReturnSuccess(nil)
 	return
 }

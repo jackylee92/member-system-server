@@ -26,8 +26,6 @@ type Client struct {
 	Content  string
 }
 
-// TODO <LiJunDong : 2022-11-06 14:34:51> --- 未成功
-
 func (c *Client) SendCode() (err error) {
 	emailClient := rgemail.EmailClient{
 		This:     c.This,

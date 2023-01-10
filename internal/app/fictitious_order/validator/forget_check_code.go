@@ -21,7 +21,6 @@ type ForgetCheckCodeReq struct {
 	SendType    int8
 }
 
-// TODO <LiJunDong : 2023/1/10 0:07> --- 需要验证找回密码-获取验证码成功后返回的token
 func CheckForgetCheckCodeParam(c *gin.Context) {
 	this := rgrequest.Get(c)
 	var param ForgetCheckCodeReq
