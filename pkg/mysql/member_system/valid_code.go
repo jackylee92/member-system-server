@@ -106,7 +106,7 @@ func (m *ValidCode) GetCodeByPhone(this *rgrequest.Client) (err error) {
 		This:   this,
 		Query:  "phone = ?",
 		Args:   []interface{}{m.Phone},
-		Fields: []string{"id", "code", "expire_time", "status"},
+		Fields: []string{"id", "code", "expire_time", "status", "user_id"},
 		Order:  "id DESC",
 	}
 	_, err = m.Find(searchParam)
@@ -121,7 +121,7 @@ func (m *ValidCode) GetCodeByEmail(this *rgrequest.Client) (err error) {
 		This:   this,
 		Query:  "email = ?",
 		Args:   []interface{}{m.Email},
-		Fields: []string{"id", "code", "expire_time", "status"},
+		Fields: []string{"id", "code", "expire_time", "status", "user_id"},
 		Order:  "id DESC",
 	}
 	_, err = m.Find(searchParam)

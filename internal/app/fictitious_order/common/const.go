@@ -10,6 +10,10 @@ const (
 	UserPasswordSalt           = "ljd"                        // 用戶密码生产 盐
 	UserTokenJWTSalt           = "ljd@jacky@0230@balabala*&!" // JWT token生成 盐
 	UserTokenJWTExpireDuration = 600                          // JWT token过期时间 秒
+	JWTTokenTypeLogin          = 1                            // token中type：注册
+	JWTTokenTypeForget         = 2                            // token中type：忘记密码
+	JWTTokenForgetCodeNoUse    = 1                            // 忘记密码的token未被核销
+	JWTTokenForgetCodeUsed     = 2                            // 忘记密码的token已被核销
 )
 
 const (

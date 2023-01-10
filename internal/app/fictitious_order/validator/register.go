@@ -58,7 +58,8 @@ func (m *RegisterReq) validateRegisterCode(this *rgrequest.Client) (validCodeId 
 	if !rgconfig.GetBool(common.RegisterCodeOnOffConfig) {
 		return validCodeId, err
 	}
-	return checkValidCode(this, int8(rgconfig.GetInt(common.RegisterGetCodeType)), m.To, m.ValidCode)
+	validCodeId, _, err = checkValidCode(this, int8(rgconfig.GetInt(common.RegisterGetCodeType)), m.To, m.ValidCode)
+	return validCodeId, err
 }
 
 // TODO <LiJunDong : 2022-11-06 17:30:02> --- 邀请码验证

@@ -17,7 +17,7 @@ import (
  */
 
 // CheckValidCode <LiJunDong : 2023-01-06 13:56:53> --- 验证验证码
-func checkValidCode(this *rgrequest.Client, typ int8, to, code string) (id int, err error) {
+func checkValidCode(this *rgrequest.Client, typ int8, to, code string) (id, userId int, err error) {
 	model := member_system.ValidCode{Phone: to}
 	if typ == common.SendTypeEmail {
 		model.Email = to
@@ -26,29 +26,29 @@ func checkValidCode(this *rgrequest.Client, typ int8, to, code string) (id int, 
 		model.Phone = to
 		err = model.GetCodeByPhone(this)
 	} else {
-		return id, errors.New("发送方式错误")
+		return id, userId, errors.New("发送方式错误")
 	}
 	if err != nil {
-		return id, err
+		return id, userId, err
 	}
 	if model.ID == 0 {
 		this.Log.Debug("model.GetCodeByPhone", to, code)
-		return id, errors.New("验证码不存在")
+		return id, userId, errors.New("验证码不存在")
 	}
 	if model.Code != code {
 		this.Log.Debug("model.Code != code", to, model.Code, code)
-		return id, errors.New("验证码不匹配")
+		return id, userId, errors.New("验证码不匹配")
 	}
 	if model.Status != member_system.UsableValidCodeStatus {
 		this.Log.Debug("model.Code != code", to, model.Code, code)
-		return id, errors.New("验证码不匹配")
+		return id, userId, errors.New("验证码不匹配")
 	}
 	expireTime := model.ExpireTime.Int()
 	if expireTime < rgtime.NowTimeInt() {
 		this.Log.Debug("expireTime < rgtime.NowTimeInt()", to, model.Code, code)
-		return id, errors.New("验证码已过期")
+		return id, userId, errors.New("验证码已过期")
 	}
-	return model.ID, err
+	return model.ID, model.UserID, err
 }
 
 func checkPhone(phone string) (err error) {

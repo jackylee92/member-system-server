@@ -17,9 +17,13 @@ import (
  */
 
 type LoginData struct {
-	Login    bool
-	UserId   string // 用string，避免int莫名其妙变成float类型
-	Username string
+	Login     bool
+	UserId    string // 用string，避免int莫名其妙变成float类型
+	Username  string
+	Typ       string // 1：登录 2：忘记密码
+	Status    string
+	ValidCode string
+	ValidId   string
 	jwt.StandardClaims
 }
 
@@ -63,5 +67,9 @@ func ParseToken(this *rgrequest.Client, token string) (loginData *LoginData, err
 	loginData.Username = claim["Username"].(string)
 	loginData.UserId = claim["UserId"].(string)
 	loginData.Login = claim["Login"].(bool)
+	loginData.Typ = claim["Typ"].(string)
+	loginData.Status = claim["Status"].(string)
+	loginData.ValidCode = claim["ValidCode"].(string)
+	loginData.ValidId = claim["ValidId"].(string)
 	return loginData, err
 }

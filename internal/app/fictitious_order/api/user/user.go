@@ -61,6 +61,37 @@ func CheckLogin(this *rgrequest.Client) (res bool, info Info, token string) {
 	return jwtData.Login, info, token
 }
 
+func CheckForgetAuthorization(this *rgrequest.Client, typ int8) (info Info) {
+	token := this.Ctx.GetHeader("Authorization")
+	if token == "" {
+		return info
+	}
+	jwtData, err := jwt.ParseToken(this, token)
+	if err != nil {
+		this.Log.Error("CheckForgetAuthorization Error", jwtData, err)
+		return info
+	}
+	userId, err := strconv.Atoi(jwtData.UserId)
+	if err != nil {
+		this.Log.Error("从JWT中解析用户ID失败", jwtData, err)
+		return info
+	}
+	jwtDataTyp, _ := strconv.Atoi(jwtData.Typ)
+	if jwtDataTyp != common.JWTTokenTypeForget {
+		this.Log.Error("Authorization类型不匹配", jwtData, err)
+		return info
+	}
+	jwtDataStatus, _ := strconv.Atoi(jwtData.Status)
+	if int8(jwtDataStatus) != typ {
+		this.Log.Error("Authorization状态不匹配", jwtData, err)
+		return info
+	}
+	jwtDataValidId, _ := strconv.Atoi(jwtData.ValidId)
+	info.UserId = userId
+	info.ValidCodeId = jwtDataValidId
+	return info
+}
+
 func (u *Info) Login(this *rgrequest.Client) (token string, err error) {
 	if u.Account == "" || u.Password == "" {
 		return token, errors.New("登录失败，用户名密码为空")
@@ -100,6 +131,7 @@ func (u *Info) Login(this *rgrequest.Client) (token string, err error) {
 		Login:    true,
 		UserId:   strconv.Itoa(u.UserId),
 		Username: u.Username,
+		Typ:      strconv.Itoa(common.JWTTokenTypeLogin),
 	}
 	token, err = jwt.GetToken(this, jwtData)
 	if err != nil {
@@ -337,7 +369,7 @@ func (u *Info) NewPassword(this *rgrequest.Client) (err error) {
 	err = accountModel.UpdatePassword(mysql.SearchParam{
 		This:  this,
 		Query: "user_id = ?",
-		Args:  []interface{}{u.Password},
+		Args:  []interface{}{u.UserId},
 	}, map[string]interface{}{"password": u.Password})
 	if err != nil {
 		this.Log.Error("accountModel.UpdatePassword", this, err)
@@ -368,4 +400,21 @@ func (u *Info) FindInfoByAccount(this *rgrequest.Client) (err error) {
 	}
 	u.UserId = userAccountModel.UserID
 	return err
+}
+
+func (u *Info) GetForgetAuthorization(this *rgrequest.Client, status int8, validCode string, validId int) (authorization string, err error) {
+	jwtData := jwt.LoginData{
+		Login:     false,
+		UserId:    strconv.Itoa(u.UserId),
+		Typ:       strconv.Itoa(common.JWTTokenTypeForget),
+		Status:    strconv.Itoa(int(status)),
+		ValidCode: validCode,
+		ValidId:   strconv.Itoa(validId),
+	}
+	authorization, err = jwt.GetToken(this, jwtData)
+	if err != nil {
+		this.Log.Error("jwt.GetToken", jwtData, err)
+		return authorization, err
+	}
+	return authorization, err
 }

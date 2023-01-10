@@ -257,7 +257,12 @@ func ForgetGetCodeHandle(ctx *gin.Context) {
 		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
 		return
 	}
-	// TODO <LiJunDong : 2023/1/10 0:08> --- 需要返回一个token
+	authorization, err := userInfo.GetForgetAuthorization(this, common.JWTTokenForgetCodeNoUse, client.Code, client.ID)
+	if err != nil {
+		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
+		return
+	}
+	this.Response.Ctx.Header("Authorization", authorization)
 	this.Response.ReturnSuccess(nil)
 	return
 }
@@ -268,11 +273,18 @@ func ForgetCheckCodeHandle(ctx *gin.Context) {
 	userInfo := user.Info{
 		Account:     req.To,
 		ValidCodeId: req.ValidCodeID,
+		UserId:      req.UserId,
 	}
 	if err := userInfo.ForgetCheckCode(this); err != nil {
 		common.ReturnErrorAndLog(this, -4001, "验证失败", err)
 		return
 	}
+	authorization, err := userInfo.GetForgetAuthorization(this, common.JWTTokenForgetCodeUsed, req.ValidCode, req.ValidCodeID)
+	if err != nil {
+		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
+		return
+	}
+	this.Response.Ctx.Header("Authorization", authorization)
 	this.Response.ReturnSuccess(nil)
 	return
 }

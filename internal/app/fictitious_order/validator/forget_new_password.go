@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/core/rgrouter"
+	"member-system-server/internal/app/fictitious_order/api/user"
+	"member-system-server/internal/app/fictitious_order/common"
 )
 
 /*
@@ -34,6 +36,12 @@ func CheckForgetNewPasswordParam(c *gin.Context) {
 		this.Response.ReturnError(-500, nil, err.Error())
 		return
 	}
+	userInfo := user.CheckForgetAuthorization(this, common.JWTTokenForgetCodeUsed)
+	if userInfo.UserId == 0 {
+		common.ReturnErrorAndLog(this, -500, "验证码错误，请重新获取", nil)
+		return
+	}
+	param.UserId = userInfo.UserId
 	this.Param = param
 	c.Next()
 }

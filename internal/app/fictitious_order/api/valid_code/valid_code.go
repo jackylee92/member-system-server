@@ -20,6 +20,7 @@ import (
 
 type ValidCodeClient struct {
 	This       *rgrequest.Client
+	ID         int
 	Code       string
 	Msg        string
 	Typ        int8
@@ -100,5 +101,7 @@ func (m *ValidCodeClient) save() (err error) {
 		DeviceInfo: m.DeviceInfo,
 		UserID:     m.UserId,
 	}
-	return model.Create(m.This)
+	err = model.Create(m.This)
+	m.ID = model.ID
+	return err
 }
