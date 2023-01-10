@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2023-01-10 00:16:27
+-- 生成日期： 2023-01-10 21:56:17
 -- 服务器版本： 5.7.26
 -- PHP 版本： 7.3.4
 
@@ -87,6 +87,23 @@ INSERT INTO `user_account` (`id`, `user_id`, `account`, `create_time`, `update_t
 (19, 16, '1231231119', '2023-01-07 01:10:07', '2023-01-07 01:10:07', 0, 1, '123123123ljd'),
 (20, 17, '1231231120', '2023-01-07 01:11:11', '2023-01-07 01:11:11', 0, 1, '123123123ljd'),
 (21, 18, 'jackylee92@139.com', '2023-01-07 01:11:39', '2023-01-07 01:11:39', 0, 1, '123123123ljd');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `user_attr`
+--
+
+CREATE TABLE `user_attr` (
+  `id` int(10) NOT NULL COMMENT '主键',
+  `user_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `invitation_code` varchar(20) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '用户推荐码',
+  `invitation_user_id` int(10) NOT NULL DEFAULT '0' COMMENT '推荐的用户id',
+  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态 0：未知 1：可用 2：禁用',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `delete_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '虚拟删除'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户附属表';
 
 -- --------------------------------------------------------
 
@@ -338,6 +355,12 @@ ALTER TABLE `user_account`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 表的索引 `user_attr`
+--
+ALTER TABLE `user_attr`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 表的索引 `user_info`
 --
 ALTER TABLE `user_info`
@@ -378,6 +401,12 @@ ALTER TABLE `role`
 --
 ALTER TABLE `user_account`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- 使用表AUTO_INCREMENT `user_attr`
+--
+ALTER TABLE `user_attr`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键';
 
 --
 -- 使用表AUTO_INCREMENT `user_info`
