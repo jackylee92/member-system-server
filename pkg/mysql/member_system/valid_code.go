@@ -128,7 +128,7 @@ func (m *ValidCode) GetCodeByEmail(this *rgrequest.Client) (err error) {
 	return err
 }
 
-func UseValidCodeById(this *rgrequest.Client, id int) (err error) {
+func UseValidCodeById(this *rgrequest.Client, id, userId int) (err error) {
 	model := ValidCode{}
 	searchParam := mysql.SearchParam{
 		This:  this,
@@ -138,6 +138,7 @@ func UseValidCodeById(this *rgrequest.Client, id int) (err error) {
 	data := map[string]interface{}{
 		"status":      UsedValidCodeStatus,
 		"update_time": mysql.NowTime(),
+		"user_id":     userId,
 	}
 	c, err := model.Update(searchParam, data)
 	if err != nil {

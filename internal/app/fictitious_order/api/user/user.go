@@ -251,10 +251,11 @@ func (m *Info) Register(this *rgrequest.Client) (userId int, err error) {
 		}
 	}
 	if rgconfig.GetBool(common.RegisterCodeOnOffConfig) {
-		if err = member_system.UseValidCodeById(this, m.ValidCodeId); err != nil {
+		if err = member_system.UseValidCodeById(this, m.ValidCodeId, userInfoModel.ID); err != nil {
 			this.Log.Error("member_system.UseValidCodeById", err)
 		}
 	}
+	//  <LiJunDong : 2023/1/11 0:28> --- 创建用户推荐码，记录使用的推荐码
 	invitationCode, err := member_system.CreateUserAttrInvitationCode(userInfoModel.ID)
 	if err != nil {
 		this.Log.Error("member_system.CreateUserAttrInvitationCode", err)
@@ -366,7 +367,7 @@ func (c *ListClient) GetList() (list []Info, total int, err error) {
 }
 
 func (u *Info) ForgetCheckCode(this *rgrequest.Client) (err error) {
-	if err := member_system.UseValidCodeById(this, u.ValidCodeId); err != nil {
+	if err := member_system.UseValidCodeById(this, u.ValidCodeId, u.UserId); err != nil {
 		this.Log.Error("member_system.UseValidCodeById", err)
 		return errors.New("验证码验证失败")
 	}

@@ -21,6 +21,7 @@ func GetRouter() *gin.Engine {
 	{
 		publicGroup.POST("/login", validator.CheckLoginParam, api.LoginHandle)
 		publicGroup.POST("/register", validator.CheckRegisterParam, api.RegisterHandle)
+		// TODO <LiJunDong : 2023/1/11 0:25> --- 验证码需要在header中添加返回token，注册时需要在header中加入token验证，获取验证码和注册需要绑定在同一次操作中
 		publicGroup.GET("/register_get_code",
 			validator.CheckRegisterGetCodeParam, validator.HighFrequencyRegisterGetCodeLock, api.RegisterGetCodeHandle)
 		// 输入手机号 接受验证码 输入新的密码

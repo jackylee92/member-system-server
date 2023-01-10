@@ -24,7 +24,7 @@ const (
 )
 
 const (
-	RegisterCodeOnOffConfig   = "register_code_on_off"   // 手机验证码
+	RegisterCodeOnOffConfig   = "register_code_on_off"   // 注册验证码
 	InvitationCodeOnOffConfig = "invitation_code_on_off" // 注册推荐码
 	RegisterGetCodeType       = "register_get_code_type" // 注册获取验证码方式 1, 2
 )
