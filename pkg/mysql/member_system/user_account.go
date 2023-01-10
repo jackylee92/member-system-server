@@ -3,8 +3,8 @@ package member_system
 import (
 	"errors"
 	"github.com/jackylee92/rgo/core/rgrequest"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/pkg/mysql"
 	"time"
 )
@@ -108,14 +108,14 @@ func (m *UserAccount) GetInfoByAccount(this *rgrequest.Client) (err error) {
 // TODO <LiJunDong : 2022-11-04 18:35:54> --- 加密
 func getPassword(password string) (newPassword string, err error) {
 	// 加密密码，使用 bcrypt 包当中的 GenerateFromPassword 方法，bcrypt.DefaultCost 代表使用默认加密成本
-	encryptPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	} else {
-		return string(encryptPassword), nil
-	}
+	//encryptPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	//if err != nil {
+	//	return "", err
+	//} else {
+	//	return string(encryptPassword), nil
+	//}
 
-	//return password + common.UserPasswordSalt
+	return password + common.UserPasswordSalt, err
 }
 
 func StatusVal(status int8) string {

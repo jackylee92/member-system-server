@@ -24,17 +24,19 @@ const (
 )
 
 type Info struct {
-	UserId       int
-	Account      string
-	Password     string
-	Username     string
-	Status       int8
-	Roles        []string
-	RolesId      []int
-	Introduction string
-	Avatar       string
-	AccountId    int
-	ValidCodeId  int
+	UserId           int
+	Account          string
+	Password         string
+	Username         string
+	Status           int8
+	Roles            []string
+	RolesId          []int
+	Introduction     string
+	Avatar           string
+	AccountId        int
+	ValidCodeId      int
+	InvitationCode   string
+	InvitationUserId int
 }
 
 type ListClient struct {
@@ -253,6 +255,20 @@ func (m *Info) Register(this *rgrequest.Client) (userId int, err error) {
 			this.Log.Error("member_system.UseValidCodeById", err)
 		}
 	}
+	invitationCode, err := member_system.CreateUserAttrInvitationCode(userInfoModel.ID)
+	if err != nil {
+		this.Log.Error("member_system.CreateUserAttrInvitationCode", err)
+	}
+	userAttrModel := member_system.UserAttr{
+		UserID:           userInfoModel.ID,
+		InvitationCode:   invitationCode,
+		InvitationUserID: m.InvitationUserId,
+		Status:           member_system.UserAttrDefaultStatus,
+	}
+	err = userAttrModel.Create(this)
+	if err != nil {
+		this.Log.Error("userAttrModel.Create", err)
+	}
 	userId = userInfoModel.ID
 	return userId, err
 }
@@ -431,4 +447,18 @@ func (u *Info) GetForgetAuthorization(this *rgrequest.Client, status int8, valid
 		return authorization, err
 	}
 	return authorization, err
+}
+
+func (u *Info) CheckInvitationCode(this *rgrequest.Client) (err error) {
+	if u.InvitationCode == "" {
+		return errors.New("推荐码为空")
+	}
+	userAttrModel := member_system.UserAttr{
+		InvitationCode: u.InvitationCode,
+	}
+	if err = userAttrModel.CodeExists(this); err != nil {
+		return err
+	}
+	u.InvitationUserId = userAttrModel.UserID
+	return err
 }

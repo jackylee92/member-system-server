@@ -119,11 +119,12 @@ func RegisterHandle(ctx *gin.Context) {
 	}
 	req := this.Param.(validator.RegisterReq)
 	userInfo := user.Info{
-		Account:     req.To,
-		Username:    user.DefaultUsername(req.To),
-		Password:    req.Password,
-		RolesId:     defaultUserRolesIds,
-		ValidCodeId: req.ValidCodeID,
+		Account:          req.To,
+		Username:         user.DefaultUsername(req.To),
+		Password:         req.Password,
+		RolesId:          defaultUserRolesIds,
+		ValidCodeId:      req.ValidCodeID,
+		InvitationUserId: req.InvitationUserId,
 	}
 	userId, err := userInfo.Register(this)
 	if err != nil {
