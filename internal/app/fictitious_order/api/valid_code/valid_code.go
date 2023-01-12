@@ -112,3 +112,18 @@ func (m *ValidCodeClient) save() (err error) {
 	m.ID = model.ID
 	return err
 }
+
+func (m *ValidCodeClient) CheckCount() error {
+	if m.To == "" {
+		return errors.New("手机号/邮箱不能为空")
+	}
+	model := member_system.ValidCode{}
+	count, err := model.GetLastMinuteCount(m.This, m.To)
+	if err != nil {
+		return err
+	}
+	if count >= common.ValidCountMinuteMaxCount {
+		return errors.New("验证码发送频繁，请稍后再试")
+	}
+	return err
+}

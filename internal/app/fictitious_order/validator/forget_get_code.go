@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"github.com/jackylee92/rgo/core/rgrouter"
+	"member-system-server/internal/app/fictitious_order/api/valid_code"
 )
 
 /*
@@ -32,6 +33,19 @@ func CheckForgetGetCodeParam(c *gin.Context) {
 		return
 	}
 	param.SendType = sendType
+	if err := param.HighFrequencyForgetGetCodeLock(this); err != nil {
+		this.Response.ReturnError(-500, nil, err.Error())
+		return
+	}
 	this.Param = param
 	c.Next()
+}
+
+func (m *ForgetGetCodeReq) HighFrequencyForgetGetCodeLock(this *rgrequest.Client) (err error) {
+	client := valid_code.ValidCodeClient{
+		This: this,
+		To:   m.To,
+	}
+	err = client.CheckCount()
+	return err
 }

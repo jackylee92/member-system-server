@@ -59,3 +59,5 @@ var AlphanumericSet = []rune{
 
 // <LiJunDong : 2023-01-11 16:21:25> --- 推荐码长度
 const InvitationCodeLength = 8
+
+const ValidCountMinuteMaxCount = 2

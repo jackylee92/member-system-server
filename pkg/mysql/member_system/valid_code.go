@@ -2,11 +2,14 @@ package member_system
 
 import (
 	"errors"
+	"github.com/jackylee92/rgo/core/rgglobal/rgconst"
 	"github.com/jackylee92/rgo/core/rgrequest"
+	"github.com/jackylee92/rgo/util/rgitf"
 	"gorm.io/gorm"
 	"log"
 	"member-system-server/pkg/mysql"
 	"strconv"
+	"time"
 )
 
 // ValidCode 验证码记录表
@@ -84,7 +87,7 @@ func (m *ValidCode) Find(param mysql.SearchParam) (exists bool, err error) {
 	}
 	mm.Find(&m)
 	if mm.RowsAffected == 0 {
-		return false, err
+		return false, mm.Error
 	}
 	return true, mm.Error
 }
@@ -148,4 +151,27 @@ func UseValidCodeById(this *rgrequest.Client, id, userId int) (err error) {
 		return errors.New("验证码数据更新失败")
 	}
 	return err
+}
+
+func (m *ValidCode) GetLastMinuteCount(this *rgrequest.Client, to string) (count int64, err error) {
+	model, err := this.Mysql.New("")
+	if err != nil {
+		return count, err
+	}
+	query := "(phone = ? OR email = ?) AND create_time > ? AND delete_flag = " + strconv.Itoa(int(mysql.NoDelete))
+	now := time.Now()              //获取当前时间
+	t := now.Add(time.Minute * -1) // 获取上一分钟时间
+	tt := t.Format(rgconst.GoTimeFormat)
+	args := []interface{}{to, to, tt}
+	mm := model.Db.Table(m.TableName()).Where(query, args...)
+	result := make(map[string]interface{})
+	fields := []string{"count(*) as c"}
+	mm = mm.Select(fields)
+	mm.Find(&result)
+	c, ok := result["c"]
+	if !ok {
+		return count, mm.Error
+	}
+	count, _ = rgitf.InterfaceToInt(c)
+	return count, mm.Error
 }

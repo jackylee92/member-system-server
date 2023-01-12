@@ -20,8 +20,7 @@ func GetRouter() *gin.Engine {
 	publicGroup := router.Group("/public")
 	{
 		publicGroup.POST("/login", validator.CheckLoginParam, api.LoginHandle)
-		publicGroup.GET("/register_get_code",
-			validator.CheckRegisterGetCodeParam, validator.HighFrequencyRegisterGetCodeLock, api.RegisterGetCodeHandle)
+		publicGroup.GET("/register_get_code", validator.CheckRegisterGetCodeParam, api.RegisterGetCodeHandle)
 		publicGroup.POST("/register", validator.CheckRegisterParam, api.RegisterHandle)
 		// 输入手机号 接受验证码 输入新的密码
 		publicGroup.POST("/forget_get_code", validator.CheckForgetGetCodeParam, api.ForgetGetCodeHandle)
