@@ -51,5 +51,5 @@ register_code_on_off: true # 注册需要验证码开关
 invitation_code_on_off: true # 注册需要推荐码开关
 register_get_code_type: 1 # 注册接受code方式 1：邮件 2：手机号
 
-access_key_id: LTAI5tCQS4FggaZtsdiURn49 # 阿里云短信账号access_key_id
-access_key_secret: 7xKBYc26q8HcIGDBYMeCXkQY036428 # 阿里云短信账号access_key_secret
+access_key_id: # 阿里云短信账号access_key_id
+access_key_secret: # 阿里云短信账号access_key_secret
