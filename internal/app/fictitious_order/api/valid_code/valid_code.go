@@ -9,6 +9,7 @@ import (
 	"member-system-server/pkg/mysql"
 	"member-system-server/pkg/mysql/member_system"
 	"member-system-server/pkg/random_code"
+	"member-system-server/pkg/sms/sms_aliyun"
 	"time"
 )
 
@@ -60,16 +61,22 @@ func (m *ValidCodeClient) send() (err error) {
 		return err
 	}
 	m.ExpireTime = rgtime.NowTimeInt() + common.RegisterCodeExpire
-	// TODO <LiJunDong : 2023-01-06 18:54:23> --- 开发
 	if m.Typ == common.SendTypePhone {
-
+		client := sms_aliyun.Client{
+			This:         m.This,
+			Phone:        m.To,
+			Code:         m.Code,
+			Title:        "阿里云短信测试",
+			TemplateCode: "SMS_154950909",
+		}
+		err = client.Send()
 	} else if m.Typ == common.SendTypeEmail {
 		client := email_default.Client{
 			This:     m.This,
 			Content:  m.Msg,
 			ToEmails: []string{m.To},
 		}
-		err = client.SendCode()
+		err = client.Send()
 	}
 	if err != nil {
 		m.This.Log.Error("验证码发送失败", err, m)

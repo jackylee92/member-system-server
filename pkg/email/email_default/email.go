@@ -26,7 +26,7 @@ type Client struct {
 	Content  string
 }
 
-func (c *Client) SendCode() (err error) {
+func (c *Client) Send() (err error) {
 	emailClient := rgemail.EmailClient{
 		This:     c.This,
 		Title:    "验证码消息",

@@ -46,7 +46,7 @@ func CheckForgetCheckCodeParam(c *gin.Context) {
 	param.ValidCodeID = validCodeId
 	param.UserId = userId
 
-	userInfo := user.CheckForgetAuthorization(this, common.JWTTokenForgetCodeNoUse)
+	userInfo := user.CheckAuthorization(this, common.JWTTokenTypeForget, common.JWTTokenForgetCodeNoUse)
 	if userInfo.UserId != param.UserId || userInfo.ValidCodeId != param.ValidCodeID {
 		this.Log.Info("user.CheckForgetAuthorization", userInfo)
 		common.ReturnErrorAndLog(this, -500, "验证码错误，请重新获取", nil)

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"github.com/jackylee92/rgo/core/rgrequest"
 	"gorm.io/gorm"
+	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/pkg/mysql"
-	"strconv"
 )
 
 // UserAttr 用户附属表
@@ -99,7 +99,19 @@ func (m *UserAttr) CodeExists(this *rgrequest.Client) (err error) {
 	return err
 }
 
-// TODO <LiJunDong : 2023/1/10 23:56> --- 生成用户自己的推荐码
-func CreateUserAttrInvitationCode(userId int) (code string, err error) {
-	return "code-" + strconv.Itoa(userId), err
+// <LiJunDong : 2023/1/10 23:56> --- 生成用户自己的推荐码
+func CreateUserAttrInvitationCode(userId int) string {
+	//return "code-" + strconv.Itoa(userId), err
+	var code []rune
+	l := common.InvitationCodeLength
+	uid := uint64(userId)
+	alphanumericSet := common.AlphanumericSet
+	idxs := make([]byte, l)
+	for i := 0; i < l; i++ {
+		idxs[i] = byte(uid % uint64(len(alphanumericSet)))
+		idx := (idxs[i] + byte(i)*idxs[0]) % byte(len(alphanumericSet))
+		code = append(code, alphanumericSet[idx])
+		uid = uid / uint64(len(alphanumericSet))
+	}
+	return string(code)
 }

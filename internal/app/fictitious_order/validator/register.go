@@ -47,7 +47,12 @@ func CheckRegisterParam(c *gin.Context) {
 		common.ReturnErrorAndLog(this, -500, err.Error(), err)
 		return
 	}
-	this.Log.Info("register", param)
+	userInfo := user.CheckAuthorization(this, common.JWTTokenTypeRegister, common.JWTTokenForgetCodeNoUse)
+	if userInfo.ValidCodeId != param.ValidCodeID {
+		this.Log.Info("user.CheckAuthorization", userInfo)
+		common.ReturnErrorAndLog(this, -500, "验证码错误，请重新获取", nil)
+		return
+	}
 	this.Param = param
 	c.Next()
 }

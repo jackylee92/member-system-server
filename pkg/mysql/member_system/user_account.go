@@ -3,8 +3,8 @@ package member_system
 import (
 	"errors"
 	"github.com/jackylee92/rgo/core/rgrequest"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"member-system-server/internal/app/fictitious_order/common"
 	"member-system-server/pkg/mysql"
 	"time"
 )
@@ -85,12 +85,9 @@ func (m *UserAccount) Create(this *rgrequest.Client) (err error) {
 }
 
 func (m *UserAccount) GetInfoByAccount(this *rgrequest.Client) (err error) {
-	password, err := getPassword(m.Password)
-	if err != nil {
-		return err
-	}
+	inPassword := m.Password
 	searchParam := mysql.SearchParam{
-		Query:  "account = ",
+		Query:  "account = ?",
 		Args:   []interface{}{m.Account},
 		Fields: []string{"id", "status", "account", "user_id", "password"},
 		This:   this,
@@ -99,23 +96,24 @@ func (m *UserAccount) GetInfoByAccount(this *rgrequest.Client) (err error) {
 	if err != nil {
 		return errors.New("通过账号查询用户信息失败|" + err.Error())
 	}
-	if m.Password != password {
+	err = ComparePassword(inPassword, m.Password)
+	if err != nil {
 		return errors.New("通过账号查询用户信息失败|密码错误")
 	}
 	return err
 }
 
-// TODO <LiJunDong : 2022-11-04 18:35:54> --- 加密
 func getPassword(password string) (newPassword string, err error) {
-	// 加密密码，使用 bcrypt 包当中的 GenerateFromPassword 方法，bcrypt.DefaultCost 代表使用默认加密成本
-	//encryptPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	//if err != nil {
-	//	return "", err
-	//} else {
-	//	return string(encryptPassword), nil
-	//}
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hash), err
+}
 
-	return password + common.UserPasswordSalt, err
+func ComparePassword(in, password string) (err error) {
+	err = bcrypt.CompareHashAndPassword([]byte(password), []byte(in))
+	return err
 }
 
 func StatusVal(status int8) string {

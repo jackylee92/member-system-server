@@ -63,14 +63,14 @@ func CheckLogin(this *rgrequest.Client) (res bool, info Info, token string) {
 	return jwtData.Login, info, token
 }
 
-func CheckForgetAuthorization(this *rgrequest.Client, typ int8) (info Info) {
+func CheckAuthorization(this *rgrequest.Client, typ, status int8) (info Info) {
 	token := this.Ctx.GetHeader("Authorization")
 	if token == "" {
 		return info
 	}
 	jwtData, err := jwt.ParseToken(this, token)
 	if err != nil {
-		this.Log.Error("CheckForgetAuthorization Error", jwtData, err)
+		this.Log.Error("CheckAuthorization Error", jwtData, err)
 		return info
 	}
 	userId, err := strconv.Atoi(jwtData.UserId)
@@ -79,12 +79,12 @@ func CheckForgetAuthorization(this *rgrequest.Client, typ int8) (info Info) {
 		return info
 	}
 	jwtDataTyp, _ := strconv.Atoi(jwtData.Typ)
-	if jwtDataTyp != common.JWTTokenTypeForget {
+	if jwtDataTyp != int(typ) {
 		this.Log.Error("Authorization类型不匹配", jwtData, err)
 		return info
 	}
 	jwtDataStatus, _ := strconv.Atoi(jwtData.Status)
-	if int8(jwtDataStatus) != typ {
+	if int8(jwtDataStatus) != status {
 		this.Log.Error("Authorization状态不匹配", jwtData, err)
 		return info
 	}
@@ -256,10 +256,10 @@ func (m *Info) Register(this *rgrequest.Client) (userId int, err error) {
 		}
 	}
 	//  <LiJunDong : 2023/1/11 0:28> --- 创建用户推荐码，记录使用的推荐码
-	invitationCode, err := member_system.CreateUserAttrInvitationCode(userInfoModel.ID)
-	if err != nil {
-		this.Log.Error("member_system.CreateUserAttrInvitationCode", err)
-	}
+	invitationCode := member_system.CreateUserAttrInvitationCode(userInfoModel.ID)
+	//if err != nil {
+	//	this.Log.Error("member_system.CreateUserAttrInvitationCode", err)
+	//}
 	userAttrModel := member_system.UserAttr{
 		UserID:           userInfoModel.ID,
 		InvitationCode:   invitationCode,
@@ -433,11 +433,11 @@ func (u *Info) FindInfoByAccount(this *rgrequest.Client) (err error) {
 	return err
 }
 
-func (u *Info) GetForgetAuthorization(this *rgrequest.Client, status int8, validCode string, validId int) (authorization string, err error) {
+func (u *Info) GetAuthorization(this *rgrequest.Client, status, typ int8, validCode string, validId int) (authorization string, err error) {
 	jwtData := jwt.LoginData{
 		Login:     false,
 		UserId:    strconv.Itoa(u.UserId),
-		Typ:       strconv.Itoa(common.JWTTokenTypeForget),
+		Typ:       strconv.Itoa(int(typ)),
 		Status:    strconv.Itoa(int(status)),
 		ValidCode: validCode,
 		ValidId:   strconv.Itoa(validId),

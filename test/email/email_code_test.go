@@ -28,6 +28,6 @@ func TestEmailCode(t *testing.T) {
 		ToEmails: []string{"jackylee92@139.com"},
 		Content:  content,
 	}
-	err := emailClient.SendCode()
+	err := emailClient.Send()
 	log.Println("error: ", err)
 }

@@ -47,10 +47,12 @@ type UserListRspItem struct {
 	Platforms       []string `json:"platforms"`
 }
 
+// LoginHandle <LiJunDong : 2023-01-11 11:04:43> --- 登录
 func LoginHandle(c *gin.Context) {
 	this := rgrequest.Get(c)
 	req := this.Param.(validator.LoginReq)
 	var msg string
+	//  <LiJunDong : 2023-01-11 11:04:58> --- 检查是否已登录
 	isLogin, userInfo, token := user.CheckLogin(this)
 	defer func() {
 		go userInfo.SaveLoginLog(this, req, msg)
@@ -60,6 +62,7 @@ func LoginHandle(c *gin.Context) {
 		this.Response.ReturnSuccess(getLoginRsp(userInfo, token))
 		return
 	}
+	//  <LiJunDong : 2023-01-11 11:05:29> --- 登录
 	userInfo.Account = req.Account
 	userInfo.Password = req.Password
 	token, err := userInfo.Login(this)
@@ -80,6 +83,7 @@ func getLoginRsp(userInfo user.Info, token string) (rsq LoginRsp) {
 	return rsq
 }
 
+// RegisterGetCodeHandle <LiJunDong : 2023-01-11 11:05:44> --- 注册获取验证码
 func RegisterGetCodeHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	req := this.Param.(validator.RegisterGetCodeReq)
@@ -89,17 +93,32 @@ func RegisterGetCodeHandle(ctx *gin.Context) {
 		Typ:   common.SendTypeEmail,
 		Scene: member_system.ValidCodeMsgTypeRegister,
 	}
+	//  <LiJunDong : 2023-01-11 11:06:15> --- 判断获取验证码方式，默认邮箱
 	if rgconfig.GetInt(common.RegisterGetCodeType) == common.SendTypePhone {
 		client.Typ = common.SendTypePhone
 	}
+	//  <LiJunDong : 2023-01-11 11:06:36> --- 发送保存验证码
 	if err := client.GetCode(); err != nil {
 		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
 		return
 	}
+	userInfo := user.Info{
+		Account:     req.To,
+		ValidCodeId: client.ID,
+	}
+	//  <LiJunDong : 2023-01-11 11:03:54> --- 生成authorization
+	authorization, err := userInfo.GetAuthorization(this, common.JWTTokenRegisterCodeNoUse, common.JWTTokenTypeRegister, client.Code, client.ID)
+	if err != nil {
+		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
+		return
+	}
+	//  <LiJunDong : 2023-01-11 11:04:14> --- 设置header返回
+	this.Response.Ctx.Header("Authorization", authorization)
 	this.Response.ReturnSuccess(nil)
 	return
 }
 
+// LogOutHandle <LiJunDong : 2023-01-11 11:09:07> --- 登出
 func LogOutHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	userInfo := user.Info{}
@@ -111,6 +130,7 @@ func LogOutHandle(ctx *gin.Context) {
 	this.Response.ReturnSuccess(nil)
 }
 
+// RegisterHandle <LiJunDong : 2023-01-11 11:09:22> --- 注册
 func RegisterHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	defaultUserRolesIds, err := user.DefaultUserRolesIds(this)
@@ -118,6 +138,7 @@ func RegisterHandle(ctx *gin.Context) {
 		this.Log.Error("user.DefaultUserRolesIds", err)
 	}
 	req := this.Param.(validator.RegisterReq)
+	//  <LiJunDong : 2023-01-11 11:09:43> --- 注册
 	userInfo := user.Info{
 		Account:          req.To,
 		Username:         user.DefaultUsername(req.To),
@@ -132,11 +153,13 @@ func RegisterHandle(ctx *gin.Context) {
 		return
 	}
 	userInfo.UserId = userId
+	//  <LiJunDong : 2023-01-11 11:09:57> --- 记录注册日志
 	go userInfo.SaveRegisterLog(this, req)
 	this.Response.ReturnSuccess(nil)
 	return
 }
 
+// GetUserInfoHandle <LiJunDong : 2023-01-11 11:10:14> --- 获取用户信息
 func GetUserInfoHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	userId, err := common.RequestUserId(this)
@@ -160,6 +183,7 @@ func getUserInfoRsp(userInfo user.Info) (rsp UserInfoRsp) {
 	return rsp
 }
 
+// GetUserListHandle <LiJunDong : 2023-01-11 11:10:27> --- 获取用户列表
 func GetUserListHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	param := this.Param.(validator.GetUserListReq)
@@ -233,17 +257,20 @@ func getUserListRsp(list []user.Info, total int) (rsp UserListRsp) {
 	return rsp
 }
 
+// ForgetGetCodeHandle <LiJunDong : 2023-01-11 11:10:45> --- 忘记密码-获取验证码
 func ForgetGetCodeHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	req := this.Param.(validator.ForgetGetCodeReq)
 	userInfo := user.Info{
 		Account: req.To,
 	}
+	//  <LiJunDong : 2023-01-11 11:02:54> --- 查询用户账户是否存在
 	err := userInfo.FindInfoByAccount(this)
 	if err != nil {
 		common.ReturnErrorAndLog(this, -4000, err.Error(), err)
 		return
 	}
+	//  <LiJunDong : 2023-01-11 11:03:08> --- 验证码校验
 	client := valid_code.ValidCodeClient{
 		This:   this,
 		To:     req.To,
@@ -258,16 +285,19 @@ func ForgetGetCodeHandle(ctx *gin.Context) {
 		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
 		return
 	}
-	authorization, err := userInfo.GetForgetAuthorization(this, common.JWTTokenForgetCodeNoUse, client.Code, client.ID)
+	//  <LiJunDong : 2023-01-11 11:03:54> --- 生成authorization
+	authorization, err := userInfo.GetAuthorization(this, common.JWTTokenForgetCodeNoUse, common.JWTTokenTypeForget, client.Code, client.ID)
 	if err != nil {
 		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
 		return
 	}
+	//  <LiJunDong : 2023-01-11 11:04:14> --- 设置header返回
 	this.Response.Ctx.Header("Authorization", authorization)
 	this.Response.ReturnSuccess(nil)
 	return
 }
 
+// ForgetCheckCodeHandle <LiJunDong : 2023-01-11 11:11:08> --- 检查验证码是否正确
 func ForgetCheckCodeHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	req := this.Param.(validator.ForgetCheckCodeReq)
@@ -276,20 +306,24 @@ func ForgetCheckCodeHandle(ctx *gin.Context) {
 		ValidCodeId: req.ValidCodeID,
 		UserId:      req.UserId,
 	}
+	//  <LiJunDong : 2023-01-11 11:11:29> --- 检查验证码
 	if err := userInfo.ForgetCheckCode(this); err != nil {
 		common.ReturnErrorAndLog(this, -4001, "验证失败", err)
 		return
 	}
-	authorization, err := userInfo.GetForgetAuthorization(this, common.JWTTokenForgetCodeUsed, req.ValidCode, req.ValidCodeID)
+	//  <LiJunDong : 2023-01-11 11:11:39> --- 获取authorization
+	authorization, err := userInfo.GetAuthorization(this, common.JWTTokenForgetCodeUsed, common.JWTTokenTypeForget, req.ValidCode, req.ValidCodeID)
 	if err != nil {
 		common.ReturnErrorAndLog(this, -4000, "获取验证码失败", err)
 		return
 	}
+	//  <LiJunDong : 2023-01-11 11:12:02> --- 设置头部
 	this.Response.Ctx.Header("Authorization", authorization)
 	this.Response.ReturnSuccess(nil)
 	return
 }
 
+// ForgetNewPasswordHandle <LiJunDong : 2023-01-11 11:12:08> --- 设置新密码
 func ForgetNewPasswordHandle(ctx *gin.Context) {
 	this := rgrequest.Get(ctx)
 	req := this.Param.(validator.ForgetNewPasswordReq)
@@ -297,6 +331,7 @@ func ForgetNewPasswordHandle(ctx *gin.Context) {
 		UserId:   req.UserId,
 		Password: req.NewPassword,
 	}
+	//  <LiJunDong : 2023-01-11 11:12:28> --- 设置新密码
 	if err := userInfo.NewPassword(this); err != nil {
 		common.ReturnErrorAndLog(this, -4001, "修改密码失败", err)
 		return

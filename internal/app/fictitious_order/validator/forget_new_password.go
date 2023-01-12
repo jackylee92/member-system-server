@@ -35,7 +35,7 @@ func CheckForgetNewPasswordParam(c *gin.Context) {
 		this.Response.ReturnError(-500, nil, err.Error())
 		return
 	}
-	userInfo := user.CheckForgetAuthorization(this, common.JWTTokenForgetCodeUsed)
+	userInfo := user.CheckAuthorization(this, common.JWTTokenTypeForget, common.JWTTokenForgetCodeUsed)
 	if userInfo.UserId == 0 {
 		common.ReturnErrorAndLog(this, -500, "验证码错误，请重新获取", nil)
 		return
